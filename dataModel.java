@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -98,19 +97,3 @@ public class dataModel {
         }
     }
 }
-=======
-import java.util.ArrayList;
-import java.util.List;
-
-public class dataModel {
-    private final List<String> messages = new ArrayList<>();
-
-    public void addMessage(String message) {
-        messages.add(message);
-    }
-
-    public List<String> getMessages() {
-        return messages;
-    }
-}
->>>>>>> 2adbe06ffe46fcdd5617e3a3ae7bdcd121e77f22

@@ -1,13 +1,12 @@
-<<<<<<< HEAD
-
-        
-=======
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 public class dataController {
     private final dataModel model;
     private final dataView view;
+
+    //File file = new File("data.txt");
 
     public dataController(dataModel model, dataView view) {
         this.model = model;
