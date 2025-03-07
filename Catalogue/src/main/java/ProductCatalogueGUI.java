@@ -64,18 +64,53 @@ public class ProductCatalogueGUI {
     }
 
     private void addProduct() {
-        String name = JOptionPane.showInputDialog("Enter product name:");
-        int stock = Integer.parseInt(JOptionPane.showInputDialog("Enter stock:"));
-        double price = Double.parseDouble(JOptionPane.showInputDialog("Enter price:"));
-        String genre = JOptionPane.showInputDialog("Enter genre:");
-        double rating = Double.parseDouble(JOptionPane.showInputDialog("Enter rating:"));
-        String manufacturer = JOptionPane.showInputDialog("Enter manufacturer:");
-        String upc = JOptionPane.showInputDialog("Enter UPC:");
-        String description = JOptionPane.showInputDialog("Enter description:");
+        JTextField nameField = new JTextField();
+        JTextField stockField = new JTextField();
+        JTextField priceField = new JTextField();
+        JTextField genreField = new JTextField();
+        JTextField ratingField = new JTextField();
+        JTextField manufacturerField = new JTextField();
+        JTextField upcField = new JTextField();
+        JTextField descriptionField = new JTextField();
         
-        Product product = new Product(0, name, stock, price, genre, rating, manufacturer, upc, description);
-        productFunctions.addProduct(product);
-        loadProducts();
+        JPanel panel = new JPanel(new GridLayout(0, 2));
+        panel.add(new JLabel("Name:"));
+        panel.add(nameField);
+        panel.add(new JLabel("Stock:"));
+        panel.add(stockField);
+        panel.add(new JLabel("Price:"));
+        panel.add(priceField);
+        panel.add(new JLabel("Genre:"));
+        panel.add(genreField);
+        panel.add(new JLabel("Rating:"));
+        panel.add(ratingField);
+        panel.add(new JLabel("Manufacturer:"));
+        panel.add(manufacturerField);
+        panel.add(new JLabel("UPC:"));
+        panel.add(upcField);
+        panel.add(new JLabel("Description:"));
+        panel.add(descriptionField);
+
+        int result = JOptionPane.showConfirmDialog(frame, panel, "Add Product", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        if (result != JOptionPane.OK_OPTION) {
+            return;
+        }
+        try {
+            String name = nameField.getText().trim();
+            int stock = Integer.parseInt(stockField.getText().trim());
+            double price = Double.parseDouble(priceField.getText().trim());
+            String genre = genreField.getText().trim();
+            double rating = Double.parseDouble(ratingField.getText().trim());
+            String manufacturer = manufacturerField.getText().trim();
+            String upc = upcField.getText().trim();
+            String description = descriptionField.getText().trim();
+            
+            Product product = new Product(0, name, stock, price, genre, rating, manufacturer, upc, description);
+            productFunctions.addProduct(product);
+            loadProducts();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(frame, "Invalid input: " + ex.getMessage());
+        }
     }
 
     private void editProduct() {
