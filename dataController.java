@@ -49,6 +49,5 @@ public class dataController {
         new dataController(model, view);
         // Make the GUI visible
         view.setVisible(true);
->>>>>>> 2adbe06ffe46fcdd5617e3a3ae7bdcd121e77f22
     }
 }
