@@ -1,13 +1,16 @@
 import java.awt.BorderLayout;
+import java.awt.GridLayout;
 import java.sql.Connection;
 import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 public class ProductCatalogueGUI {
@@ -82,12 +85,57 @@ public class ProductCatalogueGUI {
             return;
         }
         int productId = (int) tableModel.getValueAt(selectedRow, 0);
-        String newName = JOptionPane.showInputDialog("Enter new name:", tableModel.getValueAt(selectedRow, 1));
-        int newStock = Integer.parseInt(JOptionPane.showInputDialog("Enter new stock:", tableModel.getValueAt(selectedRow, 2).toString()));
-        double newPrice = Double.parseDouble(JOptionPane.showInputDialog("Enter new price:", tableModel.getValueAt(selectedRow, 3).toString()));
 
-        productFunctions.editProduct(productId, newName, newStock, newPrice);
-        loadProducts();
+        JTextField nameField = new JTextField(tableModel.getValueAt(selectedRow, 1).toString());
+        JTextField stockField = new JTextField(tableModel.getValueAt(selectedRow, 2).toString());
+        JTextField priceField = new JTextField(tableModel.getValueAt(selectedRow, 3).toString());
+        JTextField genreField = new JTextField(tableModel.getValueAt(selectedRow, 4).toString());
+        JTextField ratingField = new JTextField(tableModel.getValueAt(selectedRow, 5).toString());
+        JTextField manufacturerField = new JTextField(tableModel.getValueAt(selectedRow, 6).toString());
+        JTextField upcField = new JTextField(tableModel.getValueAt(selectedRow, 7).toString());
+        JTextField descriptionField = new JTextField(tableModel.getValueAt(selectedRow, 8).toString());
+
+        JPanel panel = new JPanel(new GridLayout(0, 2));
+        panel.add(new JLabel("Name:"));
+        panel.add(nameField);
+        panel.add(new JLabel("Stock:"));
+        panel.add(stockField);
+        panel.add(new JLabel("Price:"));
+        panel.add(priceField);
+        panel.add(new JLabel("Genre:"));
+        panel.add(genreField);
+        panel.add(new JLabel("Rating:"));
+        panel.add(ratingField);
+        panel.add(new JLabel("Manufacturer:"));
+        panel.add(manufacturerField);
+        panel.add(new JLabel("UPC:"));
+        panel.add(upcField);
+        panel.add(new JLabel("Description:"));
+        panel.add(descriptionField);
+
+        int result = JOptionPane.showConfirmDialog(frame, panel, "Edit Product", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        if (result != JOptionPane.OK_OPTION) {
+            return;
+        }
+
+        try {
+            String newName = nameField.getText().trim();
+            int newStock = Integer.parseInt(stockField.getText().trim());
+            double newPrice = Double.parseDouble(priceField.getText().trim());
+            String newGenre = genreField.getText().trim();
+            double newRating = Double.parseDouble(ratingField.getText().trim());
+            String newManufacturer = manufacturerField.getText().trim();
+            String newUpc = upcField.getText().trim();
+            String newDescription = descriptionField.getText().trim();
+
+            // Create updated product with new values.
+            Product updatedProduct = new Product(productId, newName, newStock, newPrice, newGenre, newRating, newManufacturer, newUpc, newDescription);
+            productFunctions.editProduct(productId, newName, newStock, newPrice);
+
+            loadProducts();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(frame, "Invalid input: " + ex.getMessage());
+        }
     }
 
     private void deleteProduct() {
