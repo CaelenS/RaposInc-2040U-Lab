@@ -9,7 +9,7 @@ This is a catalogue for the toys and games domain. Currently, users can:
 - Edit the catalogue: allows the user to change product parameters such as product ID, name, stock, and price.
 - Delete from the catalogue: removes a product based on an inputted product ID.
 ## UML Class Diagram
-
+![Screenshot](SS1.png)
 ## Installation Instructions
 
 ### Dependencies
