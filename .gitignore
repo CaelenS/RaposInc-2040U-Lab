@@ -1,6 +1,2 @@
 .env
-data.txt
-dataController.java
-dataModel.java
-dataView.java
 toys_games_dataset.csv
