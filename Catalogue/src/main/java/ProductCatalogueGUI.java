@@ -17,7 +17,7 @@ public class ProductCatalogueGUI {
     private JFrame frame;
     private JTable table;
     private DefaultTableModel tableModel;
-    private ProductFunctions productFunctions;
+    private InterfaceProductFunctions productFunctions;
 
     public ProductCatalogueGUI() {
         Connection conn = DatabaseConnection.connect();

@@ -1,2 +1,5 @@
 .env
 toys_games_dataset.csv
+*.class
+*.lst
+.vscode/
