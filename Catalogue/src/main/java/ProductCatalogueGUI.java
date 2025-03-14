@@ -31,6 +31,20 @@ public class ProductCatalogueGUI {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(800, 600);
 
+        //Search Field
+        JTextField searchField = new JTextField(20);
+        JButton searchButton = new JButton("Search");
+        JPanel searchPanel = new JPanel();
+        searchPanel.add(new JLabel("Search:"));
+        searchPanel.add(searchField);
+        searchPanel.add(searchButton);
+        frame.add(searchPanel, BorderLayout.NORTH);
+        searchButton.addActionListener(e -> {
+            String searchTerm = searchField.getText().trim();
+            searchProducts(searchTerm);
+        });
+
+
         tableModel = new DefaultTableModel(new String[]{"ID", "Name", "Stock", "Price", "Genre", "Rating", "Manufacturer", "UPC", "Description"}, 0);
         table = new JTable(tableModel);
         loadProducts();
@@ -183,6 +197,19 @@ public class ProductCatalogueGUI {
         productFunctions.deleteProduct(productId);
         loadProducts();
     }
+
+    public void searchProducts(String searchTerm) {
+        List<Product> results = ((ProductFunctions)productFunctions).searchProducts(searchTerm);
+        tableModel.setRowCount(0); // Clear old table content
+
+        for (Product p : results) {
+            tableModel.addRow(new Object[]{
+                p.productId, p.productName, p.stock, p.price, p.genre,
+                p.rating, p.manufacturer, p.upc, p.description
+            });
+        }
+    }
+    
 
     public static void main(String[] args) {
         ProductCatalogueGUI gui = new ProductCatalogueGUI();

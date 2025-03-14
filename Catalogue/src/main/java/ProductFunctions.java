@@ -13,7 +13,7 @@ public class ProductFunctions implements InterfaceProductFunctions {
         this.conn = conn;
     }
 
-    // 🔍 View all products
+    //View all products
     public List<Product> viewProducts() {
         List<Product> products = new ArrayList<>();
         String sql = "SELECT * FROM Products";
@@ -38,7 +38,7 @@ public class ProductFunctions implements InterfaceProductFunctions {
         return products;
     }
 
-    // ➕ Add a product
+    //Add a product
     public void addProduct(Product product) {
         String sql = "INSERT INTO Products (Product_Name, Stock, Price, Genre, Rating, Manufacturer, UPC, Description) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
@@ -58,7 +58,7 @@ public class ProductFunctions implements InterfaceProductFunctions {
         }
     }
 
-    // ✏️ Edit a product
+    //Edit a product
     public void editProduct(int productId, String newName, int newStock, double newPrice) {
         String sql = "UPDATE Products SET Product_Name = ?, Stock = ?, Price = ? WHERE Product_ID = ?";
 
@@ -74,7 +74,7 @@ public class ProductFunctions implements InterfaceProductFunctions {
         }
     }
 
-    // 🗑️ Delete a product
+    //Delete a product
     public void deleteProduct(int productId) {
         String sql = "DELETE FROM Products WHERE Product_ID = ?";
 
@@ -86,4 +86,37 @@ public class ProductFunctions implements InterfaceProductFunctions {
             System.out.println("FAILURE: Error Deleting Product: " + e.getMessage());
         }
     }
+
+    //Search for a product based on Product Name, Genre, or Manufacturer
+    public List<Product> searchProducts(String searchTerm) {
+        List<Product> products = new ArrayList<>();
+        String sql = "SELECT * FROM Products WHERE Product_Name ILIKE ? OR Genre ILIKE ? OR Manufacturer ILIKE ?";
+    
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            String likeTerm = "%" + searchTerm + "%";
+            pstmt.setString(1, likeTerm);
+            pstmt.setString(2, likeTerm);
+            pstmt.setString(3, likeTerm);
+            ResultSet rs = pstmt.executeQuery();
+    
+            while (rs.next()) {
+                products.add(new Product(
+                    rs.getInt("Product_ID"),
+                    rs.getString("Product_Name"),
+                    rs.getInt("Stock"),
+                    rs.getDouble("Price"),
+                    rs.getString("Genre"),
+                    rs.getDouble("Rating"),
+                    rs.getString("Manufacturer"),
+                    rs.getString("UPC"),
+                    rs.getString("Description")
+                ));
+            }
+        } catch (SQLException e) {
+            System.out.println("FAILURE: Error Searching Products: " + e.getMessage());
+        }
+    
+        return products;
+    }
+    
 }
