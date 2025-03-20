@@ -18,8 +18,15 @@ public class ProductCatalogueGUI {
     private JTable table;
     private DefaultTableModel tableModel;
     private InterfaceProductFunctions productFunctions;
-
+    
     public ProductCatalogueGUI() {
+        // Get the current user from Session rather than from a parameter.
+        User user = Session.getCurrentUser();
+        if (user == null) {
+            JOptionPane.showMessageDialog(null, "No user logged in.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
         Connection conn = DatabaseConnection.connect();
         if (conn == null) {
             JOptionPane.showMessageDialog(null, "Database connection failed.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -44,7 +51,6 @@ public class ProductCatalogueGUI {
             searchProducts(searchTerm);
         });
 
-
         tableModel = new DefaultTableModel(new String[]{"ID", "Name", "Stock", "Price", "Genre", "Rating", "Manufacturer", "UPC", "Description"}, 0);
         table = new JTable(tableModel);
         loadProducts();
@@ -52,20 +58,22 @@ public class ProductCatalogueGUI {
         JScrollPane scrollPane = new JScrollPane(table);
         frame.add(scrollPane, BorderLayout.CENTER);
 
-        JPanel buttonPanel = new JPanel();
-        JButton addButton = new JButton("Add");
-        JButton editButton = new JButton("Edit");
-        JButton deleteButton = new JButton("Delete");
+        // Add admin buttons only if user is admin.
+        if ("admin".equals(user.role)) { 
+            JPanel buttonPanel = new JPanel();
+            JButton addButton = new JButton("Add");
+            JButton editButton = new JButton("Edit");
+            JButton deleteButton = new JButton("Delete");
 
-        buttonPanel.add(addButton);
-        buttonPanel.add(editButton);
-        buttonPanel.add(deleteButton);
-        frame.add(buttonPanel, BorderLayout.SOUTH);
+            buttonPanel.add(addButton);
+            buttonPanel.add(editButton);
+            buttonPanel.add(deleteButton);
+            frame.add(buttonPanel, BorderLayout.SOUTH);
 
-        addButton.addActionListener(e -> addProduct());
-        editButton.addActionListener(e -> editProduct());
-        deleteButton.addActionListener(e -> deleteProduct());
-
+            addButton.addActionListener(e -> addProduct());
+            editButton.addActionListener(e -> editProduct());
+            deleteButton.addActionListener(e -> deleteProduct());
+        }
         frame.setVisible(true);
     }
 
@@ -211,7 +219,7 @@ public class ProductCatalogueGUI {
     }
     
 
-    public static void main(String[] args) {
-        ProductCatalogueGUI gui = new ProductCatalogueGUI();
-    }
+    // public static void main(String[] args) {
+    //     ProductCatalogueGUI gui = new ProductCatalogueGUI();
+    // }
 }

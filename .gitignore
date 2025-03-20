@@ -3,3 +3,6 @@ toys_games_dataset.csv
 *.class
 *.lst
 .vscode/
+Products+Images.csv
+Products.csv
+temp.py

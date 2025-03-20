@@ -9,3 +9,10 @@ CREATE TABLE IF NOT EXISTS Products (
     UPC VARCHAR(12) UNIQUE,
     Description TEXT
 );
+
+CREATE TABLE IF NOT EXISTS Users (
+    User_ID SERIAL PRIMARY KEY,
+    Username VARCHAR(50) UNIQUE NOT NULL,
+    Password VARCHAR(255) NOT NULL,
+    Role VARCHAR(10) NOT NULL CHECK (Role IN ('admin', 'employee'))
+);
