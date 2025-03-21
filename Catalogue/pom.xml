@@ -1,37 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Maven Project Object Model (POM) file -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    
+    <!-- Define the model version -->
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.example</groupId>
-    <artifactId>TestRapos</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <!-- Project metadata -->
+    <groupId>org.example</groupId> <!-- The group ID, typically representing the package structure -->
+    <artifactId>TestRapos</artifactId> <!-- The artifact ID, representing the project name -->
+    <version>1.0-SNAPSHOT</version> <!-- Version of the project, "-SNAPSHOT" indicates ongoing development -->
 
+    <!-- Project properties -->
     <properties>
-        <maven.compiler.source>23</maven.compiler.source>
-        <maven.compiler.target>23</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>23</maven.compiler.source> <!-- Java source version -->
+        <maven.compiler.target>23</maven.compiler.target> <!-- Java target version -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding> <!-- Encoding for source files -->
     </properties>
 
+    <!-- Dependencies required for the project -->
     <dependencies>
+        <!-- PostgreSQL JDBC Driver for database connectivity -->
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>42.7.2</version>
         </dependency>
+
+        <!-- Dotenv Java library for environment variable management -->
         <dependency>
             <groupId>io.github.cdimascio</groupId>
             <artifactId>dotenv-java</artifactId>
             <version>3.0.0</version>
         </dependency>
 
+        <!-- JUnit Jupiter API for writing unit tests -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
             <version>5.9.2</version>
-            <scope>test</scope>
+            <scope>test</scope> <!-- Test scope means this dependency is only used during testing -->
         </dependency>
+
+        <!-- JUnit Jupiter Engine for running unit tests -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
@@ -39,5 +51,4 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
 </project>
