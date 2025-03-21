@@ -60,14 +60,14 @@ public class LoginGUI {
             String password = new String(passwordField.getPassword());
             User user = auth.login(username, password);
             if (user != null) {
-                Session.setCurrentUser(user);
                 loginFrame.dispose();
-                new ProductCatalogueGUI();
+                new ProductCatalogueGUI(user);
             } else {
                 JOptionPane.showMessageDialog(loginFrame, "Invalid credentials.");
             }
         });
     }
+
     public static void main(String[] args) {
         new LoginGUI();
     }

@@ -19,7 +19,7 @@ public class CatalogueGUITest {
 
     @BeforeEach
     public void setUp() throws Exception {
-        gui = new ProductCatalogueGUI();
+        gui = new ProductCatalogueGUI(new User(1, "admin","admin"));
         fakeProductFunctions = new FakeProductFunctions();
     
         // Replace the REAL productFunctions with the FAKE version.

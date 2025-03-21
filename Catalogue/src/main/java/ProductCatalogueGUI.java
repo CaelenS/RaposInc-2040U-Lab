@@ -18,11 +18,12 @@ public class ProductCatalogueGUI {
     private JTable table;
     private DefaultTableModel tableModel;
     private InterfaceProductFunctions productFunctions;
+    private User currentUser;
     
-    public ProductCatalogueGUI() {
+    public ProductCatalogueGUI(User user) {
         // Get the current user from Session rather than from a parameter.
-        User user = Session.getCurrentUser();
-        if (user == null) {
+        this.currentUser = user;
+        if (currentUser == null) {
             JOptionPane.showMessageDialog(null, "No user logged in.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
