@@ -60,5 +60,5 @@ Follow these steps to manage and interact with the catalogue:
     - Click the "Remove" button and confirm the deletion when prompted.
 ![Deleting Functionality](Delete.png)
 
-## UML Class Diagram
+## TDD: Test Suite
 ![Screenshot](SS_2)
