@@ -1,5 +1,6 @@
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -19,7 +20,9 @@ public class CatalogueGUITest {
 
     @BeforeEach
     public void setUp() throws Exception {
-        gui = new ProductCatalogueGUI(new User(1, "admin","admin"));
+        Connection conn = DatabaseConnection.connect();
+        UserAuth auth = new UserAuth(conn);
+        gui = new ProductCatalogueGUI(auth.login("admin", "admin123"));
         fakeProductFunctions = new FakeProductFunctions();
     
         // Replace the REAL productFunctions with the FAKE version.

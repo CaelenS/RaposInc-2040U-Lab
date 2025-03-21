@@ -25,7 +25,6 @@ public class LoginGUI {
         }
         UserAuth auth = new UserAuth(conn);
 
-        // Create login frame sized 800x600 and center it
         loginFrame = new JFrame("Login");
         loginFrame.setSize(800, 600);
         loginFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -40,7 +39,6 @@ public class LoginGUI {
     }
 
     private void placeComponents(JPanel panel, UserAuth auth) {
-        // Adjust components to be positioned to appear centered in the 800x600 panel
         int panelWidth = 800;
         
         JLabel userLabel = new JLabel("Username:");
