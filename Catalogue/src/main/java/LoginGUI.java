@@ -1,5 +1,7 @@
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.Connection;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -7,6 +9,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.Timer;
 
 public class LoginGUI {
     private JFrame loginFrame;
@@ -21,11 +25,14 @@ public class LoginGUI {
         }
         UserAuth auth = new UserAuth(conn);
 
+        // Create login frame sized 800x600 and center it
         loginFrame = new JFrame("Login");
-        loginFrame.setSize(300, 200);
+        loginFrame.setSize(800, 600);
         loginFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        loginFrame.setLocationRelativeTo(null);  // Center on screen
 
         JPanel panel = new JPanel();
+        panel.setLayout(null);
         loginFrame.add(panel);
         placeComponents(panel, auth);
 
@@ -33,26 +40,27 @@ public class LoginGUI {
     }
 
     private void placeComponents(JPanel panel, UserAuth auth) {
-        panel.setLayout(null);
-
+        // Adjust components to be positioned to appear centered in the 800x600 panel
+        int panelWidth = 800;
+        
         JLabel userLabel = new JLabel("Username:");
-        userLabel.setBounds(10, 20, 80, 25);
+        userLabel.setBounds((panelWidth - 300) / 2, 100, 80, 25);
         panel.add(userLabel);
 
         usernameField = new JTextField(20);
-        usernameField.setBounds(100, 20, 160, 25);
+        usernameField.setBounds((panelWidth - 300) / 2 + 90, 100, 160, 25);
         panel.add(usernameField);
 
         JLabel passwordLabel = new JLabel("Password:");
-        passwordLabel.setBounds(10, 50, 80, 25);
+        passwordLabel.setBounds((panelWidth - 300) / 2, 140, 80, 25);
         panel.add(passwordLabel);
 
         passwordField = new JPasswordField(20);
-        passwordField.setBounds(100, 50, 160, 25);
+        passwordField.setBounds((panelWidth - 300) / 2 + 90, 140, 160, 25);
         panel.add(passwordField);
 
         JButton loginButton = new JButton("Login");
-        loginButton.setBounds(100, 90, 80, 25);
+        loginButton.setBounds((panelWidth - 80) / 2, 200, 80, 25);
         panel.add(loginButton);
 
         loginButton.addActionListener(e -> {
@@ -61,7 +69,27 @@ public class LoginGUI {
             User user = auth.login(username, password);
             if (user != null) {
                 loginFrame.dispose();
-                new ProductCatalogueGUI(user);
+                // Show a loading screen before transitioning to the catalogue
+                JFrame loadingFrame = new JFrame("Loading");
+                loadingFrame.setSize(800, 600);
+                loadingFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                loadingFrame.setLocationRelativeTo(null);  // Center the loading frame
+                
+                JPanel loadingPanel = new JPanel(new BorderLayout());
+                JLabel loadingLabel = new JLabel("Loading, please wait...", SwingConstants.CENTER);
+                loadingPanel.add(loadingLabel, BorderLayout.CENTER);
+                loadingFrame.add(loadingPanel);
+                loadingFrame.setVisible(true);
+
+                Timer timer = new Timer(2000, new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent evt) {
+                        loadingFrame.dispose();
+                        new ProductCatalogueGUI(user);
+                    }
+                });
+                timer.setRepeats(false);
+                timer.start();
             } else {
                 JOptionPane.showMessageDialog(loginFrame, "Invalid credentials.");
             }
