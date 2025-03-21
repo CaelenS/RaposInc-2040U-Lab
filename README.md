@@ -32,9 +32,9 @@ This is a catalogue for the toys and games domain. Currently, users can:
     - Create a `.env` file in the project root and enter the appropriate key(s) for your database configuration (e.g., database URL, username, and password).
 
 4. **Run the Program**  
-    - Compile the Java files.  
+    - Open in IntelliJ IDE
+    - Compile the pom.xml file using Maven  
     - Run the `ProductCatalogueGUI.java` file to launch the graphical user interface.
-
 
 ## How to Use
 Follow these steps to manage and interact with the catalogue:
