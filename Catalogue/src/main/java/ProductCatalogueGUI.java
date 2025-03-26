@@ -1,6 +1,7 @@
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.sql.Connection;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -14,13 +15,23 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
-public class ProductCatalogueGUI {
+public class ProductCatalogueGUI extends JFrame {
     private JFrame frame;
     private JTable table;
     private DefaultTableModel tableModel;
-    private InterfaceProductFunctions productFunctions;
+    private ProductFunctions productFunctions;
     private User currentUser;
     
+    // Filtering/search components.
+    private JComboBox<String> columnDropdown, operatorDropdown, suggestionDropdown;
+    private JTextField searchField, filterValueField;
+    private JButton searchButton;
+    
+    // Define which columns are numeric and which are categorical.
+    private final String[] numericalColumns = {"Price", "Stock", "Rating"};
+    // For Product_Name we use free-text search (no suggestions).
+    private final String[] categoricalColumns = {"Genre", "Manufacturer"};
+
     public ProductCatalogueGUI(User user) {
         // Get the current user from Session rather than from a parameter.
         this.currentUser = user;
@@ -36,134 +47,48 @@ public class ProductCatalogueGUI {
         }
         productFunctions = new ProductFunctions(conn);
         
-        frame = new JFrame("Product Catalog");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(800, 600);
-        
-        // Create a composite top panel to hold both search and filter controls.
-        JPanel topPanel = new JPanel();
-        topPanel.setLayout(new BorderLayout());
-        
-        // --------------------
-        // Search Panel (remains unchanged)
+        setTitle("Product Catalogue");
+        setSize(800, 600);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLayout(new BorderLayout());
+
+        // Create search and filter controls.
+        searchField = new JTextField(15);
+        columnDropdown = new JComboBox<>(new String[]{"Select Column", "Product_Name", "Stock", "Price", "Genre", "Rating", "Manufacturer"});
+        operatorDropdown = new JComboBox<>(new String[]{"<", "=", ">"});
+        suggestionDropdown = new JComboBox<>();
+        filterValueField = new JTextField(10);
+        searchButton = new JButton("Search");
+
         JPanel searchPanel = new JPanel();
-        JTextField searchField = new JTextField(20);
-        JButton searchButton = new JButton("Search");
         searchPanel.add(new JLabel("Search:"));
         searchPanel.add(searchField);
+        searchPanel.add(new JLabel("Filter by:"));
+        searchPanel.add(columnDropdown);
+        searchPanel.add(operatorDropdown);
+        searchPanel.add(suggestionDropdown);
+        searchPanel.add(filterValueField);
         searchPanel.add(searchButton);
-        
-        // Wire search button as before.
-        searchButton.addActionListener(e -> {
-            String searchTerm = searchField.getText().trim();
-            searchProducts(searchTerm);
-        });
-        
-        // --------------------
-        // Filter Panel (new)
-        JPanel filterPanel = new JPanel();
-        
-        // Create a drop down for selecting the column to filter.
-        String[] columns = {"Product_Name", "Price", "Stock", "Rating", "Genre", "Manufacturer"};
-        JComboBox<String> columnSelector = new JComboBox<>(columns);
-        filterPanel.add(new JLabel("Filter by:"));
-        filterPanel.add(columnSelector);
-        
-        // Create a drop down for numeric operators.
-        String[] numericOps = {"<", "=", ">"};
-        JComboBox<String> operatorSelector = new JComboBox<>(numericOps);
-        filterPanel.add(operatorSelector);
-        
-        // Create a text field for numeric filter value.
-        JTextField filterValueField = new JTextField(10);
-        filterPanel.add(filterValueField);
-        
-        // Create a combo box for categorical suggestions.
-        // Initially hidden until a categorical column is selected.
-        JComboBox<String> suggestionComboBox = new JComboBox<>();
-        suggestionComboBox.setVisible(false);
-        filterPanel.add(suggestionComboBox);
-        
-        // Listen to changes in the column selector.
-        columnSelector.addActionListener(e -> {
-            String selectedColumn = (String) columnSelector.getSelectedItem();
-            // Define which columns are numeric.
-            boolean isNumeric = selectedColumn.equals("Price") || 
-            selectedColumn.equals("Stock") || 
-            selectedColumn.equals("Rating");
-            
-            if (isNumeric) {
-                // For numeric columns:
-                // Show the operator dropdown and numeric text field.
-                operatorSelector.setVisible(true);
-                filterValueField.setVisible(true);
-                // Optionally, reset any locked operator by user.
-                operatorSelector.setSelectedIndex(0); 
-                // Hide the suggestion dropdown.
-                suggestionComboBox.setVisible(false);
-            } else {
-                // For categorical columns:
-                // Either lock operator to "=" (operator dropdown no longer matters)
-                // Hide the operator dropdown and numeric text field.
-                operatorSelector.setVisible(false);
-                filterValueField.setVisible(false);
-                // And display the suggestion combo box.
-                String[] suggestions = getSuggestionsFor(selectedColumn);
-                suggestionComboBox.removeAllItems();
-                for (String s : suggestions) {
-                    suggestionComboBox.addItem(s);
-                }
-                suggestionComboBox.setVisible(true);
-            }
-        });
-        
-        // Create an "Apply Filter" button.
-        JButton applyFilterButton = new JButton("Apply Filter");
-        filterPanel.add(applyFilterButton);
-        
-        // Wire the filter apply button.
-        applyFilterButton.addActionListener(e -> {
-            String selectedColumn = (String) columnSelector.getSelectedItem();
-            String operator = "="; // For categorical filters the operator is locked.
-            String filterValue = "";
-            boolean isNumeric = selectedColumn.equals("Price") ||
-            selectedColumn.equals("Stock") ||
-            selectedColumn.equals("Rating");
-            
-            if (isNumeric) {
-                operator = (String) operatorSelector.getSelectedItem();
-                filterValue = filterValueField.getText().trim();
-            } else {
-                // Use the suggestion combo box value for categorical filters.
-                filterValue = (String) suggestionComboBox.getSelectedItem();
-            }
-            
-            List<Product> filteredProducts = ((ProductFunctions) productFunctions)
-            .filterProducts(selectedColumn, operator, filterValue);
-            
-            tableModel.setRowCount(0);  // Clear the table.
-            for (Product p : filteredProducts) {
-                tableModel.addRow(new Object[]{
-                    p.productId, p.productName, p.stock, p.price, p.genre,
-                    p.rating, p.manufacturer, p.upc, p.description
-                });
-            }
-        });
-        
-        // --------------------
-        // Add search and filter panels to the composite top panel.
-        topPanel.add(searchPanel, BorderLayout.NORTH);
-        topPanel.add(filterPanel, BorderLayout.SOUTH);
-        
-        // Add the composite top panel to the frame.
-        frame.add(topPanel, BorderLayout.NORTH);
-        
+
+        add(searchPanel, BorderLayout.NORTH);
+
+        // Initially, hide filter controls (only show as needed)
+        operatorDropdown.setVisible(false);
+        suggestionDropdown.setVisible(false);
+        filterValueField.setVisible(false);
+
+        // When the selected column changes, update visible filter fields.
+        columnDropdown.addActionListener(e -> updateFilterUI());
+        // Wire search button
+        searchButton.addActionListener(e -> searchProducts());
+
+        // Set up table (the rest of your table view remains unchanged).
         tableModel = new DefaultTableModel(new String[]{"ID", "Name", "Stock", "Price", "Genre", "Rating", "Manufacturer", "UPC", "Description"}, 0);
         table = new JTable(tableModel);
         loadProducts();
         
         JScrollPane scrollPane = new JScrollPane(table);
-        frame.add(scrollPane, BorderLayout.CENTER);
+        add(scrollPane, BorderLayout.CENTER);
         
         // Add admin buttons only if user is admin.
         if ("admin".equals(user.role)) { 
@@ -175,13 +100,13 @@ public class ProductCatalogueGUI {
             buttonPanel.add(addButton);
             buttonPanel.add(editButton);
             buttonPanel.add(deleteButton);
-            frame.add(buttonPanel, BorderLayout.SOUTH);
+            add(buttonPanel, BorderLayout.SOUTH);
             
             addButton.addActionListener(e -> addProduct());
             editButton.addActionListener(e -> editProduct());
             deleteButton.addActionListener(e -> deleteProduct());
         }
-        frame.setVisible(true);
+        setVisible(true);
     }
     
     private void loadProducts() {
@@ -313,32 +238,63 @@ public class ProductCatalogueGUI {
         loadProducts();
     }
     
-    public void searchProducts(String searchTerm) {
-        List<Product> results = ((ProductFunctions)productFunctions).searchProducts(searchTerm);
-        tableModel.setRowCount(0); // Clear old table content
-        
-        for (Product p : results) {
+    public void searchProducts() {
+        String searchText = searchField.getText().trim();
+        String selectedColumn = (String) columnDropdown.getSelectedItem();
+        String operator = (String) operatorDropdown.getSelectedItem();
+        String filterValue = filterValueField.getText();
+        String selectedValue = (String) suggestionDropdown.getSelectedItem();
+
+        // For Product_Name filtering, searchText is used (free-text search).
+        // Otherwise, for numeric filters, use operator and filterValue.
+        // For categorical filters, use selectedValue from the drop-down.
+        List<Product> results = ProductFunctions.searchProducts(searchText, selectedColumn, operator, filterValue, selectedValue);
+        updateTable(results);
+    }
+    
+    // Updates the JTable with the search/filter results.
+    private void updateTable(List<Product> products) {
+        tableModel.setRowCount(0);
+        for (Product p : products) {
             tableModel.addRow(new Object[]{
-                p.productId, p.productName, p.stock, p.price, p.genre,
-                p.rating, p.manufacturer, p.upc, p.description
+                p.productId, p.productName, p.stock, p.price, p.genre, p.rating, p.manufacturer, p.upc, p.description
             });
         }
     }
     
-    // This method should query the database or use a pre-fetched list of distinct values.
-    private String[] getSuggestionsFor(String column) {
-        // For a production system, execute a SQL query such as:
-        // SELECT DISTINCT column FROM Products ORDER BY column;
-        // Here we simply return example suggestions.
-        switch (column) {
-            case "Product_Name":
-            return new String[]{"Toy Car", "Doll", "Puzzle", "Board Game"};
-            case "Genre":
-            return new String[]{"Toy", "Puzzle", "Board Game", "Action Figure", "Video Games"};
-            case "Manufacturer":
-            return new String[]{"Brand A", "Brand B", "Brand C"};
-            default:
-            return new String[]{};
+    // Updates filtering UI according to selected column.
+    private void updateFilterUI() {
+        String selectedColumn = (String) columnDropdown.getSelectedItem();
+        if (selectedColumn == null || selectedColumn.equals("Select Column")) {
+            operatorDropdown.setVisible(false);
+            suggestionDropdown.setVisible(false);
+            filterValueField.setVisible(false);
+            return;
+        }
+        boolean isNumeric = Arrays.asList(numericalColumns).contains(selectedColumn);
+        
+        // For numeric columns, display operator dropdown and a text input field.
+        operatorDropdown.setVisible(isNumeric);
+        filterValueField.setVisible(isNumeric);
+        // For categorical filters (Genre and Manufacturer), show suggestion dropdown.
+        suggestionDropdown.setVisible(!isNumeric);
+        
+        // If the selected column is one of our categorical ones (Genre, Manufacturer),
+        // fill the suggestion drop-down with at most 7 distinct values.
+        if (!isNumeric && !selectedColumn.equals("Product_Name")) {
+            populateSuggestions(selectedColumn);
+        }
+    }
+    
+    // Calls productFunctions.getDistinctValues() to populate the suggestion dropdown.
+    private void populateSuggestions(String column) {
+        List<String> suggestions = productFunctions.getDistinctValues(column);
+        suggestionDropdown.removeAllItems();
+        int count = 0;
+        for (String value : suggestions) {
+            suggestionDropdown.addItem(value);
+            count++;
+            if (count >= 7) break;
         }
     }
 }
