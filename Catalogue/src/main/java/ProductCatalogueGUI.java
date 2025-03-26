@@ -13,7 +13,11 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.Timer;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class ProductCatalogueGUI extends JFrame {
     private JFrame frame;
@@ -21,11 +25,16 @@ public class ProductCatalogueGUI extends JFrame {
     private DefaultTableModel tableModel;
     private ProductFunctions productFunctions;
     private User currentUser;
+    // Class field for the timer:
+    private Timer suggestionTimer;
+
     
     // Filtering/search components.
     private JComboBox<String> columnDropdown, operatorDropdown, suggestionDropdown;
     private JTextField searchField, filterValueField;
     private JButton searchButton;
+    // Class field to store current column selected for suggestions.
+    private String currentSuggestionColumn = "";
     
     // Define which columns are numeric and which are categorical.
     private final String[] numericalColumns = {"Price", "Stock", "Rating"};
@@ -243,11 +252,17 @@ public class ProductCatalogueGUI extends JFrame {
         String selectedColumn = (String) columnDropdown.getSelectedItem();
         String operator = (String) operatorDropdown.getSelectedItem();
         String filterValue = filterValueField.getText();
-        String selectedValue = (String) suggestionDropdown.getSelectedItem();
-
-        // For Product_Name filtering, searchText is used (free-text search).
-        // Otherwise, for numeric filters, use operator and filterValue.
-        // For categorical filters, use selectedValue from the drop-down.
+        String selectedValue = "";
+        if (!Arrays.asList(numericalColumns).contains(selectedColumn)) {
+            // For free-text search in Product_Name or using the suggestion dropdown.
+            if (selectedColumn.equals("Product_Name")) {
+                selectedValue = filterValue;  // using the text field
+            } else {
+                JTextField editor = (JTextField) suggestionDropdown.getEditor().getEditorComponent();
+                selectedValue = editor.getText().trim();
+            }
+        }
+        
         List<Product> results = ProductFunctions.searchProducts(searchText, selectedColumn, operator, filterValue, selectedValue);
         updateTable(results);
     }
@@ -273,28 +288,81 @@ public class ProductCatalogueGUI extends JFrame {
         }
         boolean isNumeric = Arrays.asList(numericalColumns).contains(selectedColumn);
         
-        // For numeric columns, display operator dropdown and a text input field.
+        // For numeric columns, use operator dropdown and text field.
         operatorDropdown.setVisible(isNumeric);
         filterValueField.setVisible(isNumeric);
-        // For categorical filters (Genre and Manufacturer), show suggestion dropdown.
-        suggestionDropdown.setVisible(!isNumeric);
         
-        // If the selected column is one of our categorical ones (Genre, Manufacturer),
-        // fill the suggestion drop-down with at most 7 distinct values.
-        if (!isNumeric && !selectedColumn.equals("Product_Name")) {
-            populateSuggestions(selectedColumn);
+        // For categorical fields:
+        if (!isNumeric) {
+            // For Product_Name, if you want free-text search instead of suggestions:
+            if (selectedColumn.equals("Product_Name")) {
+                suggestionDropdown.setVisible(false);
+                filterValueField.setVisible(true);
+            } else {
+                // For Genre and Manufacturer, show an editable dropdown with search.
+                filterValueField.setVisible(false);
+                suggestionDropdown.setVisible(true);
+                suggestionDropdown.setEditable(true);
+                currentSuggestionColumn = selectedColumn;
+                // Set up DocumentListener (ensuring it's not added multiple times).
+                setupSuggestionDropdownListener();
+                // Initially update suggestions with an empty search term.
+                updateSuggestionDropdown("");
+            }
         }
     }
     
-    // Calls productFunctions.getDistinctValues() to populate the suggestion dropdown.
-    private void populateSuggestions(String column) {
-        List<String> suggestions = productFunctions.getDistinctValues(column);
-        suggestionDropdown.removeAllItems();
-        int count = 0;
-        for (String value : suggestions) {
-            suggestionDropdown.addItem(value);
-            count++;
-            if (count >= 7) break;
+    private void setupSuggestionDropdownListener() {
+        JTextField editor = (JTextField) suggestionDropdown.getEditor().getEditorComponent();
+        // Remove any existing listeners.
+        for (javax.swing.event.DocumentListener dl : ((javax.swing.text.AbstractDocument) editor.getDocument()).getListeners(javax.swing.event.DocumentListener.class)) {
+            editor.getDocument().removeDocumentListener(dl);
         }
+        editor.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
+            private void update() {
+                String text = editor.getText().trim();
+                updateSuggestionDropdown(text);
+            }
+            @Override
+            public void insertUpdate(javax.swing.event.DocumentEvent e) {
+                update();
+            }
+            @Override
+            public void removeUpdate(javax.swing.event.DocumentEvent e) {
+                update();
+            }
+            @Override
+            public void changedUpdate(javax.swing.event.DocumentEvent e) {
+                update();
+            }
+        });
+    }
+    
+    private void updateSuggestionDropdown(String typedText) {
+        // Stop any pending timer.
+        if (suggestionTimer != null && suggestionTimer.isRunning()) {
+            suggestionTimer.stop();
+        }
+        // Start a new timer with a 300ms delay.
+        suggestionTimer = new Timer(300, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                SwingUtilities.invokeLater(() -> {
+                    suggestionDropdown.removeAllItems();
+                    // If nothing is typed, do not add any item and do not show the popup.
+                    if (typedText.isEmpty()) {
+                        suggestionDropdown.setPopupVisible(false);
+                        return;
+                    }
+                    List<String> suggestions = productFunctions.getDistinctValues(currentSuggestionColumn, typedText);
+                    for (String s : suggestions) {
+                        suggestionDropdown.addItem(s);
+                    }
+                    suggestionDropdown.setPopupVisible(!suggestions.isEmpty());
+                });
+            }
+        });
+        suggestionTimer.setRepeats(false);
+        suggestionTimer.start();
     }
 }

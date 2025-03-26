@@ -186,19 +186,29 @@ public class ProductFunctions implements InterfaceProductFunctions {
         return suggestions;
     }
 
-    public static List<String> getDistinctValues(String column) {
+    public List<String> getDistinctValues(String column, String searchTerm) {
         List<String> values = new ArrayList<>();
-        String query = "SELECT DISTINCT " + column + " FROM Products";
         
-        try (Connection conn = DatabaseConnection.connect();
-             PreparedStatement stmt = conn.prepareStatement(query);
-             ResultSet rs = stmt.executeQuery()) {
+        // Ensure only specific columns can be searched for suggestions.
+        Set<String> allowedColumns = new HashSet<>(Arrays.asList("Product_Name", "Genre", "Manufacturer"));
+        if (!allowedColumns.contains(column)) {
+            System.out.println("Invalid column for suggestions: " + column);
+            return values;
+        }
+    
+        String sql = "SELECT DISTINCT " + column + " FROM Products WHERE " + column + " ILIKE ? ORDER BY " + column + " LIMIT 7";
+        
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, "%" + searchTerm + "%");
+            ResultSet rs = pstmt.executeQuery();
+            
             while (rs.next()) {
                 values.add(rs.getString(column));
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             System.out.println("Error fetching distinct values: " + e.getMessage());
         }
+        
         return values;
     }
 
