@@ -1,5 +1,7 @@
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.util.Arrays;
 import java.util.List;
@@ -14,10 +16,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.Timer;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import javax.swing.table.DefaultTableModel;
 
 public class ProductCatalogueGUI extends JFrame {
     private JFrame frame;
@@ -27,6 +27,10 @@ public class ProductCatalogueGUI extends JFrame {
     private User currentUser;
     // Class field for the timer:
     private Timer suggestionTimer;
+    // Prevent re‐entrance from our own updates.
+    private boolean suggestionIsUpdating = false;
+    // Store the last query to avoid reloading if unchanged.
+    private String lastSuggestionQuery = "";
 
     
     // Filtering/search components.
@@ -320,7 +324,15 @@ public class ProductCatalogueGUI extends JFrame {
         }
         editor.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
             private void update() {
+                if (suggestionIsUpdating) {
+                    return;
+                }
                 String text = editor.getText().trim();
+                // Only update if the text has changed.
+                if (text.equals(lastSuggestionQuery)) {
+                    return;
+                }
+                lastSuggestionQuery = text;
                 updateSuggestionDropdown(text);
             }
             @Override
@@ -348,17 +360,45 @@ public class ProductCatalogueGUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 SwingUtilities.invokeLater(() -> {
-                    suggestionDropdown.removeAllItems();
-                    // If nothing is typed, do not add any item and do not show the popup.
-                    if (typedText.isEmpty()) {
-                        suggestionDropdown.setPopupVisible(false);
-                        return;
+                    suggestionIsUpdating = true;
+                    try {
+                        JTextField editor = (JTextField) suggestionDropdown.getEditor().getEditorComponent();
+                        // Remove caret update code -- let the editor manage its caret.
+                        // int docLength = editor.getDocument().getLength();
+                        // int caretPos = editor.getCaretPosition();
+                        // if (caretPos > docLength) {
+                        //     caretPos = docLength;
+                        // }
+                        
+                        suggestionDropdown.removeAllItems();
+        
+                        if (typedText.isEmpty()) {
+                            suggestionDropdown.setPopupVisible(false);
+                            return;
+                        }
+                        
+                        // Retrieve suggestions from the database.
+                        List<String> suggestions = productFunctions.getDistinctValues(currentSuggestionColumn, typedText);
+                        for (String s : suggestions) {
+                            suggestionDropdown.addItem(s);
+                        }
+                        suggestionDropdown.setPopupVisible(!suggestions.isEmpty());
+                        
+                        // Optionally, if you really need to restore caret, try a delayed restoration.
+                        // SwingUtilities.invokeLater(() -> {
+                        //     try {
+                        //         int newDocLength = editor.getDocument().getLength();
+                        //         editor.setCaretPosition(Math.min(caretPos, newDocLength));
+                        //     } catch (IllegalArgumentException ex) {
+                        //         editor.setCaretPosition(editor.getDocument().getLength());
+                        //     }
+                        // });
+                        
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    } finally {
+                        suggestionIsUpdating = false;
                     }
-                    List<String> suggestions = productFunctions.getDistinctValues(currentSuggestionColumn, typedText);
-                    for (String s : suggestions) {
-                        suggestionDropdown.addItem(s);
-                    }
-                    suggestionDropdown.setPopupVisible(!suggestions.isEmpty());
                 });
             }
         });
