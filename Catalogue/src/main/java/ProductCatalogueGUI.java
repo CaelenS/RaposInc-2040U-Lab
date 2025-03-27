@@ -37,6 +37,7 @@ public class ProductCatalogueGUI extends JFrame {
     private JComboBox<String> columnDropdown, operatorDropdown, suggestionDropdown;
     private JTextField searchField, filterValueField;
     private JButton searchButton;
+    private JPanel searchPanel;
     // Class field to store current column selected for suggestions.
     private String currentSuggestionColumn = "";
     
@@ -72,8 +73,7 @@ public class ProductCatalogueGUI extends JFrame {
         suggestionDropdown = new JComboBox<>();
         filterValueField = new JTextField(10);
         searchButton = new JButton("Search");
-
-        JPanel searchPanel = new JPanel();
+        searchPanel = new JPanel();
         searchPanel.add(new JLabel("Search:"));
         searchPanel.add(searchField);
         searchPanel.add(new JLabel("Filter by:"));
@@ -83,6 +83,7 @@ public class ProductCatalogueGUI extends JFrame {
         searchPanel.add(filterValueField);
         searchPanel.add(searchButton);
 
+        add(searchPanel, BorderLayout.NORTH);
         add(searchPanel, BorderLayout.NORTH);
 
         // Initially, hide filter controls (only show as needed)
@@ -255,19 +256,20 @@ public class ProductCatalogueGUI extends JFrame {
         String searchText = searchField.getText().trim();
         String selectedColumn = (String) columnDropdown.getSelectedItem();
         String operator = (String) operatorDropdown.getSelectedItem();
-        String filterValue = filterValueField.getText();
         String selectedValue = "";
+        
+        // For non-numeric fields (including Product_Name), use the suggestion dropdown's text.
         if (!Arrays.asList(numericalColumns).contains(selectedColumn)) {
-            // For free-text search in Product_Name or using the suggestion dropdown.
-            if (selectedColumn.equals("Product_Name")) {
-                selectedValue = filterValue;  // using the text field
-            } else {
-                JTextField editor = (JTextField) suggestionDropdown.getEditor().getEditorComponent();
-                selectedValue = editor.getText().trim();
-            }
+            JTextField editor = (JTextField) suggestionDropdown.getEditor().getEditorComponent();
+            selectedValue = editor.getText().trim();
+        } else {
+            // For numeric columns, use the free text field.
+            selectedValue = filterValueField.getText();
         }
         
-        List<Product> results = ProductFunctions.searchProducts(searchText, selectedColumn, operator, filterValue, selectedValue);
+        // Call your searchProducts function.
+        // Note: The 4th parameter 'filterValue' is unused for non-numeric filters.
+        List<Product> results = ProductFunctions.searchProducts(searchText, selectedColumn, operator, "", selectedValue);
         updateTable(results);
     }
     
@@ -281,7 +283,6 @@ public class ProductCatalogueGUI extends JFrame {
         }
     }
     
-    // Updates filtering UI according to selected column.
     private void updateFilterUI() {
         String selectedColumn = (String) columnDropdown.getSelectedItem();
         if (selectedColumn == null || selectedColumn.equals("Select Column")) {
@@ -292,27 +293,28 @@ public class ProductCatalogueGUI extends JFrame {
         }
         boolean isNumeric = Arrays.asList(numericalColumns).contains(selectedColumn);
         
-        // For numeric columns, use operator dropdown and text field.
+        // For numeric columns, use the operator dropdown and free-text field.
         operatorDropdown.setVisible(isNumeric);
         filterValueField.setVisible(isNumeric);
         
-        // For categorical fields:
+        // For categorical fields (including Product_Name) use the autocomplete dropdown.
         if (!isNumeric) {
-            // For Product_Name, if you want free-text search instead of suggestions:
-            if (selectedColumn.equals("Product_Name")) {
-                suggestionDropdown.setVisible(false);
-                filterValueField.setVisible(true);
-            } else {
-                // For Genre and Manufacturer, show an editable dropdown with search.
-                filterValueField.setVisible(false);
-                suggestionDropdown.setVisible(true);
-                suggestionDropdown.setEditable(true);
-                currentSuggestionColumn = selectedColumn;
-                // Set up DocumentListener (ensuring it's not added multiple times).
-                setupSuggestionDropdownListener();
-                // Initially update suggestions with an empty search term.
-                updateSuggestionDropdown("");
+            currentSuggestionColumn = selectedColumn;
+            filterValueField.setVisible(false);
+            
+            // Remove old suggestionDropdown from its parent if present.
+            if (suggestionDropdown.getParent() != null) {
+                suggestionDropdown.getParent().remove(suggestionDropdown);
             }
+            // Create a new AutocompleteJComboBox based on DatabaseSearchable.
+            AutocompleteJComboBox autoCombo = new AutocompleteJComboBox(new DatabaseSearchable(selectedColumn, productFunctions));
+            suggestionDropdown = autoCombo;
+            
+            // Insert the dropdown before the Search button so that the Search button remains last.
+            int index = searchPanel.getComponentCount() - 1; // assuming searchButton is the last added component
+            searchPanel.add(suggestionDropdown, index);
+            searchPanel.revalidate();
+            searchPanel.repaint();
         }
     }
     
