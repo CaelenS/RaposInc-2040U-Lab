@@ -243,7 +243,7 @@ public class ProductFunctions implements InterfaceProductFunctions {
             }
             if (hasFilter) {
                 if (Arrays.asList("Price", "Stock", "Rating").contains(selectedColumn)) {
-                    stmt.setDouble(paramIndex++, Double.parseDouble(filterValue));
+                    stmt.setDouble(paramIndex++, Double.parseDouble(selectedValue));
                 } else {
                     stmt.setString(paramIndex++, selectedValue);
                 }

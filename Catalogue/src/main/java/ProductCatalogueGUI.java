@@ -266,7 +266,10 @@ public class ProductCatalogueGUI extends JFrame {
             // For numeric columns, use the free text field.
             selectedValue = filterValueField.getText();
         }
-        
+        System.out.println("Search Text: " + searchText);
+        System.out.println("Selected Column: " + selectedColumn);
+        System.out.println("Operator: " + operator);
+        System.out.println("Selected Value: " + selectedValue);
         // Call your searchProducts function.
         // Note: The 4th parameter 'filterValue' is unused for non-numeric filters.
         List<Product> results = ProductFunctions.searchProducts(searchText, selectedColumn, operator, "", selectedValue);
