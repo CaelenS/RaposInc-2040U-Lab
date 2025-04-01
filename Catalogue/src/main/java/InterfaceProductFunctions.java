@@ -1,6 +1,8 @@
 import java.util.List;
-// Interface for all the functions of the product.
-// Made to ensure unit testing did not encounter errors.
+/**
+ * Defines the contract for product-related operations, ensuring consistency and testability.
+ * This interface is designed to facilitate unit testing by providing a structured set of methods.
+ */
 public interface InterfaceProductFunctions {
     List<Product> viewProducts();
     void addProduct(Product product);
