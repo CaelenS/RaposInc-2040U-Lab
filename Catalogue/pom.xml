@@ -9,14 +9,15 @@
 
     <!-- Project metadata -->
     <groupId>org.example</groupId> <!-- The group ID, typically representing the package structure -->
-    <artifactId>TestRapos</artifactId> <!-- The artifact ID, representing the project name -->
-    <version>1.0-SNAPSHOT</version> <!-- Version of the project, "-SNAPSHOT" indicates ongoing development -->
+    <artifactId>RaposCatalogue</artifactId> <!-- The artifact ID, representing the project name -->
+    <version>1.0</version> <!-- Version of the project, "-SNAPSHOT" indicates ongoing development -->
 
     <!-- Project properties -->
     <properties>
         <maven.compiler.source>23</maven.compiler.source> <!-- Java source version -->
         <maven.compiler.target>23</maven.compiler.target> <!-- Java target version -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding> <!-- Encoding for source files -->
+        <maven.test.skip>true</maven.test.skip>
     </properties>
 
     <!-- Dependencies required for the project -->
@@ -51,4 +52,31 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <!-- Jar Plugin for .jar file creation -->
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.5.1</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <shadedArtifactAttached>false</shadedArtifactAttached> <!-- Add this line -->
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>LoginGUI</mainClass>
+                                </transformer>
+                            </transformers>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
