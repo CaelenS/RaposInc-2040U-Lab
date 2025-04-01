@@ -5,14 +5,23 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+/**
+ * Unit tests for the product-related functions.
+ */
 class ProductFunctionsTest {
     private FakeProductFunctions fakeProductFunctions;
 
+    /**
+     * Sets up the test environment before each test.
+     */
     @BeforeEach
     void setUp() {
         fakeProductFunctions = new FakeProductFunctions();
     }
 
+    /**
+     * Tests adding a product to the fake product list.
+     */
     @Test
     void testAddProduct() {
         Product p = new Product(1, "Test Product", 10, 99.99, "Electronics", 4.5, "TestCorp", "123456789", "A great product");
@@ -21,6 +30,9 @@ class ProductFunctionsTest {
         assertEquals(1, fakeProductFunctions.viewProducts().size());
     }
 
+    /**
+     * Tests editing a product's details in the fake product list.
+     */
     @Test
     void testEditProduct() {
         Product p = new Product(1, "Test Product", 10, 99.99, "Electronics", 4.5, "TestCorp", "123456789", "A great product");
@@ -30,6 +42,9 @@ class ProductFunctionsTest {
         assertEquals("Updated Name", fakeProductFunctions.viewProducts().get(0).productName);
     }
 
+    /**
+     * Tests deleting a product from the fake product list.
+     */
     @Test
     void testDeleteProduct() {
         Product p = new Product(1, "Test Product", 10, 99.99, "Electronics", 4.5, "TestCorp", "123456789", "A great product");
@@ -40,8 +55,10 @@ class ProductFunctionsTest {
     }
 
 
-    // Class to fake real product functions so there is not interferance with database.
-    private static class FakeProductFunctions implements InterfaceProductFunctions {
+    /**
+     * A fake implementation of product functions for testing purposes.
+     * Simulates product operations without database interactions.
+     */    private static class FakeProductFunctions implements InterfaceProductFunctions {
         private final List<Product> fakeProducts = new ArrayList<>();
 
         @Override
