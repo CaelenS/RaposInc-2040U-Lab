@@ -19,6 +19,10 @@ import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import javax.swing.table.DefaultTableModel;
 
+    /**
+     * GUI for managing a product catalogue.
+     * Allows users to view, search, add, edit, and delete products.
+     */
 public class ProductCatalogueGUI extends JFrame {
     private JFrame frame;
     private JTable table;
@@ -46,6 +50,10 @@ public class ProductCatalogueGUI extends JFrame {
     // For Product_Name we use free-text search (no suggestions).
     private final String[] categoricalColumns = {"Genre", "Manufacturer"};
 
+    /**
+     * Constructs the ProductCatalogueGUI for the given user.
+     * @param user The currently logged-in user.
+     */
     public ProductCatalogueGUI(User user) {
         // Get the current user from Session rather than from a parameter.
         this.currentUser = user;
@@ -122,7 +130,10 @@ public class ProductCatalogueGUI extends JFrame {
         }
         setVisible(true);
     }
-    
+
+    /**
+     * Loads products from the database and updates the table.
+     */
     private void loadProducts() {
         tableModel.setRowCount(0);
         List<Product> products = productFunctions.viewProducts();
@@ -130,7 +141,10 @@ public class ProductCatalogueGUI extends JFrame {
             tableModel.addRow(new Object[]{product.productId, product.productName, product.stock, product.price, product.genre, product.rating, product.manufacturer, product.upc, product.description});
         }
     }
-    
+
+    /**
+     * Opens a dialog to add a new product to the catalogue.
+     */
     private void addProduct() {
         JTextField nameField = new JTextField();
         JTextField stockField = new JTextField();
@@ -180,7 +194,10 @@ public class ProductCatalogueGUI extends JFrame {
             JOptionPane.showMessageDialog(frame, "Invalid input: " + ex.getMessage());
         }
     }
-    
+
+    /**
+     * Opens a dialog to edit the selected product.
+     */
     private void editProduct() {
         int selectedRow = table.getSelectedRow();
         if (selectedRow == -1) {
@@ -241,6 +258,9 @@ public class ProductCatalogueGUI extends JFrame {
         }
     }
     
+    /**
+     * Deletes the selected product from the catalogue.
+     */
     private void deleteProduct() {
         int selectedRow = table.getSelectedRow();
         if (selectedRow == -1) {
@@ -251,7 +271,10 @@ public class ProductCatalogueGUI extends JFrame {
         productFunctions.deleteProduct(productId);
         loadProducts();
     }
-    
+
+    /**
+     * Searches for products based on user input and updates the table with results.
+     */
     public void searchProducts() {
         String searchText = searchField.getText().trim();
         String selectedColumn = (String) columnDropdown.getSelectedItem();
@@ -276,8 +299,10 @@ public class ProductCatalogueGUI extends JFrame {
         updateTable(results);
     }
     
-    // Updates the JTable with the search/filter results.
-    private void updateTable(List<Product> products) {
+    /**
+     * Updates the product table with search/filter results.
+     * @param products List of products to display.
+     */    private void updateTable(List<Product> products) {
         tableModel.setRowCount(0);
         for (Product p : products) {
             tableModel.addRow(new Object[]{
@@ -286,6 +311,9 @@ public class ProductCatalogueGUI extends JFrame {
         }
     }
     
+    /**
+     * Updates the UI elements related to filtering based on the selected column.
+     */
     private void updateFilterUI() {
         String selectedColumn = (String) columnDropdown.getSelectedItem();
         if (selectedColumn == null || selectedColumn.equals("Select Column")) {
@@ -321,6 +349,9 @@ public class ProductCatalogueGUI extends JFrame {
         }
     }
     
+    /**
+     * Sets up a listener for the suggestion dropdown to update based on user input.
+     */
     private void setupSuggestionDropdownListener() {
         JTextField editor = (JTextField) suggestionDropdown.getEditor().getEditorComponent();
         // Remove any existing listeners.
@@ -355,6 +386,10 @@ public class ProductCatalogueGUI extends JFrame {
         });
     }
     
+    /**
+     * Updates the suggestion dropdown with values matching the user's typed input.
+     * @param typedText The current input from the user.
+     */
     private void updateSuggestionDropdown(String typedText) {
         // Stop any pending timer.
         if (suggestionTimer != null && suggestionTimer.isRunning()) {
