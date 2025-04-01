@@ -9,14 +9,25 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Handles product-related operations including viewing, adding, editing,
+ * deleting, searching, filtering, and retrieving product suggestions.
+ */
 public class ProductFunctions implements InterfaceProductFunctions {
     private final Connection conn;
     
+    /**
+     * Constructs a ProductFunctions instance with a given database connection.
+     * @param conn The database connection.
+     */
     public ProductFunctions(Connection conn) {
         this.conn = conn;
     }
     
-    // View all products
+    /**
+     * Retrieves all products from the database.
+     * @return A list of all products.
+     */
     public List<Product> viewProducts() {
         List<Product> products = new ArrayList<>();
         String sql = "SELECT * FROM Products";
@@ -40,7 +51,10 @@ public class ProductFunctions implements InterfaceProductFunctions {
         return products;
     }
     
-    // Add a product
+    /**
+     * Adds a new product to the database.
+     * @param product The product to add.
+     */
     public void addProduct(Product product) {
         String sql = "INSERT INTO Products (Product_Name, Stock, Price, Genre, Rating, Manufacturer, UPC, Description) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -59,7 +73,13 @@ public class ProductFunctions implements InterfaceProductFunctions {
         }
     }
     
-    // Edit a product
+    /**
+     * Updates an existing product's details.
+     * @param productId The ID of the product to update.
+     * @param newName The new name of the product.
+     * @param newStock The new stock value.
+     * @param newPrice The new price.
+     */
     public void editProduct(int productId, String newName, int newStock, double newPrice) {
         String sql = "UPDATE Products SET Product_Name = ?, Stock = ?, Price = ? WHERE Product_ID = ?";
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -74,7 +94,10 @@ public class ProductFunctions implements InterfaceProductFunctions {
         }
     }
     
-    // Delete a product
+    /**
+     * Deletes a product from the database.
+     * @param productId The ID of the product to delete.
+     */
     public void deleteProduct(int productId) {
         String sql = "DELETE FROM Products WHERE Product_ID = ?";
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -86,7 +109,11 @@ public class ProductFunctions implements InterfaceProductFunctions {
         }
     }
     
-    // Search for a product (free-text search on Product_Name, Genre, or Manufacturer)
+    /**
+     * Searches for products based on a search term.
+     * @param searchTerm The search term used for matching product name, genre, or manufacturer.
+     * @return A list of matching products.
+     */
     public List<Product> searchProducts(String searchTerm) {
         List<Product> products = new ArrayList<>();
         String sql = "SELECT * FROM Products WHERE Product_Name ILIKE ? OR Genre ILIKE ? OR Manufacturer ILIKE ?";
@@ -115,7 +142,14 @@ public class ProductFunctions implements InterfaceProductFunctions {
         return products;
     }
     
-    // Filter products based on a given column, operator, and filter value.
+    /**
+     * Filters products based on a specified column, operator, and filter value.
+     * 
+     * @param column The column to filter by.
+     * @param operator The comparison operator (e.g., <, =, >).
+     * @param filterValue The value to filter against.
+     * @return A list of filtered Product objects.
+     */
     public List<Product> filterProducts(String column, String operator, String filterValue) {
         List<Product> products = new ArrayList<>();
         // Allowed columns:
@@ -164,7 +198,13 @@ public class ProductFunctions implements InterfaceProductFunctions {
         return products;
     }
     
-    // Get suggestions from the database (returns at most 7 distinct matches)
+    /**
+     * Retrieves a list of distinct suggestions for a specified column based on a partial input.
+     *
+     * @param column The column to search for suggestions (must be Product_Name, Genre, or Manufacturer).
+     * @param partialValue The partial input to match against the column values.
+     * @return A list of up to 7 distinct suggestions matching the input.
+     */
     public List<String> getSuggestions(String column, String partialValue) {
         List<String> suggestions = new ArrayList<>();
         // Allow suggestions only for these columns.
@@ -186,6 +226,14 @@ public class ProductFunctions implements InterfaceProductFunctions {
         return suggestions;
     }
 
+    /**
+     * Retrieves a list of distinct values for a given column that match a search term.
+     * Only specific columns (Product_Name, Genre, Manufacturer) are allowed for search.
+     *
+     * @param column     The column name to search within.
+     * @param searchTerm The term to match against the column values.
+     * @return A list of distinct matching values, limited to 7 results.
+     */
     public List<String> getDistinctValues(String column, String searchTerm) {
         List<String> values = new ArrayList<>();
         
@@ -212,9 +260,17 @@ public class ProductFunctions implements InterfaceProductFunctions {
         return values;
     }
 
-    // This static searchProducts method integrates free-text search and filtering.
-    // For numeric filters, operator and filterValue are used;
-    // for categorical filters, the selected value from the drop-down is used.
+    /**
+     * Searches for products based on a free-text search and/or filtering criteria.
+     * Supports filtering by numeric values using operators and categorical values using exact matches.
+     *
+     * @param searchText     The free-text search term for product name, genre, or manufacturer.
+     * @param selectedColumn The column to filter by (e.g., Price, Stock, Rating, Genre, etc.).
+     * @param operator       The operator for numeric filtering (e.g., >, <, =).
+     * @param filterValue    The value for numeric filtering.
+     * @param selectedValue  The value for categorical filtering.
+     * @return A list of products matching the search and filter criteria.
+     */
     public static List<Product> searchProducts(String searchText, String selectedColumn, String operator, String filterValue, String selectedValue) {
         List<Product> productList = new ArrayList<>();
         StringBuilder query = new StringBuilder("SELECT * FROM Products WHERE 1=1");
