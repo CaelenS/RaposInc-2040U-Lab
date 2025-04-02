@@ -100,6 +100,13 @@ public class CatalogueGUITest {
         private List<Product> fakeProducts = new ArrayList<>();
         private Set<Integer> deletedProducts = new HashSet<>();
 
+        //BlackBoxTesting
+        @Override
+        public List<String> getDistinctValues(String column, String typeFilter) {
+            // Just return dummy/fake values for testing purposes
+            return List.of("FakeValue1", "FakeValue2");
+        }
+
         @Override
         public List<Product> viewProducts() {
             return fakeProducts;

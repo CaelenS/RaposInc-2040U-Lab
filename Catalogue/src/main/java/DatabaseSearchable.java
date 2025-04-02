@@ -2,9 +2,9 @@ import java.util.Collection;
 
 public class DatabaseSearchable implements Searchable<String, String> {
     private final String column;
-    private final ProductFunctions productFunctions;
+    private final InterfaceProductFunctions productFunctions; //BlackBoxTests
     
-    public DatabaseSearchable(String column, ProductFunctions productFunctions) {
+    public DatabaseSearchable(String column, InterfaceProductFunctions productFunctions) { //BlackBoxTests
         this.column = column;
         this.productFunctions = productFunctions;
     }

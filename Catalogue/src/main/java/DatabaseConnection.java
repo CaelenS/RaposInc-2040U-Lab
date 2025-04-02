@@ -4,9 +4,20 @@ import java.sql.SQLException;
 
 import io.github.cdimascio.dotenv.Dotenv;
 
+//BlackBoxTesting
 public class DatabaseConnection {
-    private static final Dotenv dotenv = Dotenv.load();
-    private static final String URL = dotenv.get("DB_URL");
+    private static Dotenv dotenv;
+    private static String URL;
+
+    static {
+        if (shouldSkipEnv()) {
+            System.out.println("[TEST MODE] Skipping .env loading.");
+            URL = "";
+        } else {
+            dotenv = Dotenv.configure().load();
+            URL = dotenv.get("DB_URL");
+        }
+    }
 
     public static Connection connect() {
         try {
@@ -16,5 +27,9 @@ public class DatabaseConnection {
             System.err.println("Connection failed: " + e.getMessage());
             return null;
         }
+    }
+
+    private static boolean shouldSkipEnv() {
+        return Boolean.getBoolean("env.skip");
     }
 }
