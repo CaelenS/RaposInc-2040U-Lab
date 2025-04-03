@@ -1,4 +1,12 @@
 -------------------------------------------------------------------------------
 Test set: CatalogueGUITest
 -------------------------------------------------------------------------------
-Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 12.41 s -- in CatalogueGUITest
+Tests run: 2, Failures: 2, Errors: 0, Skipped: 0, Time elapsed: 0.005 sec <<< FAILURE!
+CatalogueGUITest.testLoadProducts()  Time elapsed: 0.004 sec  <<< FAILURE!
+java.lang.NullPointerException: Cannot invoke "CatalogueGUITest$FakeProductFunctions.setFakeProducts(java.util.List)" because "this.fakeProductFunctions" is null
+	at CatalogueGUITest.testLoadProducts(CatalogueGUITest.java:43)
+
+CatalogueGUITest.testDeleteProduct()  Time elapsed: 0 sec  <<< FAILURE!
+java.lang.NullPointerException: Cannot invoke "CatalogueGUITest$FakeProductFunctions.setFakeProducts(java.util.List)" because "this.fakeProductFunctions" is null
+	at CatalogueGUITest.testDeleteProduct(CatalogueGUITest.java:70)
+
