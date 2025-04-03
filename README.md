@@ -104,8 +104,7 @@ Make sure to log in with the appropriate credentials to access the corresponding
 
     These functionalities help you quickly locate specific products and refine the catalogue view based on your search criteria.
 
-## Video:
-<video controls src="video.mp4" title="Video Demonstration"></video>
+## Video: ![Video](video.mp4)  
 
 ## TDD: Test Suite
 The project includes a suite of unit and integration tests located in the `Tests/` folder. These tests validate:
