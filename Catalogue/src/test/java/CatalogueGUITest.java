@@ -14,10 +14,24 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+/**
+ * Unit tests for the ProductCatalogueGUI class.
+ * This test class ensures that product loading and deletion work correctly.
+ */
+
+/**
+ * Default Constructor for CatalogueGUITest
+ */
 public class CatalogueGUITest {
     private ProductCatalogueGUI gui;
     private FakeProductFunctions fakeProductFunctions;
 
+    /**
+     * Sets up the test environment before each test.
+     * Establishes a connection, logs in as an admin, and injects a fake product functions object.
+     * 
+     * @throws Exception if any reflection or database issues occur.
+     */
     @BeforeEach
     public void setUp() throws Exception {
         Connection conn = DatabaseConnection.connect();
@@ -31,7 +45,13 @@ public class CatalogueGUITest {
         productFunctionsField.set(gui, fakeProductFunctions);  // Inject fake dependency.
     }
 
-    // Unit Tests.
+    /**
+     * Tests if products load correctly into the table.
+     * Uses reflection to invoke the loadProducts method and verifies that
+     * the table contains the expected product data.
+     * 
+     * @throws Exception if reflection fails.
+     */
     @Test
     public void testLoadProducts() throws Exception {
         // Make fake test product.
@@ -59,6 +79,13 @@ public class CatalogueGUITest {
         assertEquals(999.99, model.getValueAt(0, 3), "Price mismatch");
     }
 
+    /**
+     * Tests if the deleteProduct method successfully removes a product from the table.
+     * Loads a test product, simulates row selection, deletes the product, and verifies
+     * that the table is empty and the product is marked as deleted.
+     * 
+     * @throws Exception if reflection fails.
+     */
     @Test
     public void testDeleteProduct() throws Exception {
         // Setup fake test the product.
@@ -95,7 +122,10 @@ public class CatalogueGUITest {
         assertEquals(0, model.getRowCount(), "Table should be empty after deletion");
     }
 
-    // A fake of ProductFunctions for testing.
+    /**
+     * A fake implementation of ProductFunctions for testing purposes.
+     * Stores products in memory to avoid database dependencies.
+     */
     private static class FakeProductFunctions implements InterfaceProductFunctions {
         private List<Product> fakeProducts = new ArrayList<>();
         private Set<Integer> deletedProducts = new HashSet<>();
@@ -127,10 +157,21 @@ public class CatalogueGUITest {
             fakeProducts.removeIf(p -> p.productId == productId);
         }
 
+        /**
+         * Checks if a product has been deleted.
+         * 
+         * @param productId The ID of the product to check.
+         * @return true if the product is deleted, false otherwise.
+         */
         public boolean isDeleted(int productId) {
             return deletedProducts.contains(productId);
         }
 
+        /**
+         * Sets the list of fake products for testing.
+         * 
+         * @param products The list of products to use as test data.
+         */
         public void setFakeProducts(List<Product> products) {
             fakeProducts = products;
         }

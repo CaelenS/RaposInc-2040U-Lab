@@ -2,13 +2,28 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
+/**
+ * Handles user authentication.
+ */
 public class UserAuth {
     private Connection conn;
 
+    /**
+     * Constructs a UserAuth instance with a database connection.
+     *
+     * @param conn The database connection.
+     */
     public UserAuth(Connection conn) {
         this.conn = conn;
     }
 
+    /**
+     * Authenticates a user with the given username and password.
+     *
+     * @param username The user's username.
+     * @param password The plaintext password input.
+     * @return The authenticated User object if credentials are valid, otherwise null.
+     */
     public User login(String username, String password) {
         String sql = "SELECT * FROM Users WHERE Username = ? AND Password = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {

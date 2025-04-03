@@ -1,4 +1,4 @@
-.env
+Catalogue/src/main/resources/.env
 toys_games_dataset.csv
 *.class
 *.lst

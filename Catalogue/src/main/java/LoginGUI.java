@@ -12,11 +12,24 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
 
+/**
+ * A graphical user interface for user login.
+ * This class provides a login window with fields for username and password,
+ * and validates credentials using a database connection.
+ */
 public class LoginGUI {
+    
+    /** The main login window frame. */
     private JFrame loginFrame;
+    /** The input field for the username. */
     private JTextField usernameField;
+    /** The input field for the password (masked). */
     private JPasswordField passwordField;
 
+    /**
+     * Constructs the Login GUI and initializes database connection.
+     * If the database connection fails, an error message is displayed.
+     */
     public LoginGUI() {
         Connection conn = DatabaseConnection.connect();
         if (conn == null) {
@@ -38,6 +51,12 @@ public class LoginGUI {
         loginFrame.setVisible(true);
     }
 
+    /**
+     * Places UI components on the panel and sets up the login button functionality.
+     *
+     * @param panel The panel where components are added.
+     * @param auth  The {@link UserAuth} instance used for login authentication.
+     */
     private void placeComponents(JPanel panel, UserAuth auth) {
         int panelWidth = 800;
         
@@ -67,33 +86,46 @@ public class LoginGUI {
             User user = auth.login(username, password);
             if (user != null) {
                 loginFrame.dispose();
-                // Show a loading screen before transitioning to the catalogue
-                JFrame loadingFrame = new JFrame("Loading");
-                loadingFrame.setSize(800, 600);
-                loadingFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                loadingFrame.setLocationRelativeTo(null);  // Center the loading frame
-                
-                JPanel loadingPanel = new JPanel(new BorderLayout());
-                JLabel loadingLabel = new JLabel("Loading, please wait...", SwingConstants.CENTER);
-                loadingPanel.add(loadingLabel, BorderLayout.CENTER);
-                loadingFrame.add(loadingPanel);
-                loadingFrame.setVisible(true);
-
-                Timer timer = new Timer(2000, new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent evt) {
-                        loadingFrame.dispose();
-                        new ProductCatalogueGUI(user);
-                    }
-                });
-                timer.setRepeats(false);
-                timer.start();
+                showLoadingScreen(user);
             } else {
                 JOptionPane.showMessageDialog(loginFrame, "Invalid credentials.");
             }
         });
     }
 
+    /**
+     * Displays a loading screen before transitioning to the product catalog.
+     *
+     * @param user The authenticated user instance.
+     */
+    private void showLoadingScreen(User user) {
+        JFrame loadingFrame = new JFrame("Loading");
+        loadingFrame.setSize(800, 600);
+        loadingFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        loadingFrame.setLocationRelativeTo(null);
+        
+        JPanel loadingPanel = new JPanel(new BorderLayout());
+        JLabel loadingLabel = new JLabel("Loading, please wait...", SwingConstants.CENTER);
+        loadingPanel.add(loadingLabel, BorderLayout.CENTER);
+        loadingFrame.add(loadingPanel);
+        loadingFrame.setVisible(true);
+
+        Timer timer = new Timer(2000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                loadingFrame.dispose();
+                new ProductCatalogueGUI(user);
+            }
+        });
+        timer.setRepeats(false);
+        timer.start();
+    }
+
+    /**
+     * The main entry point for launching the login GUI.
+     *
+     * @param args Command-line arguments (not used).
+     */
     public static void main(String[] args) {
         new LoginGUI();
     }
