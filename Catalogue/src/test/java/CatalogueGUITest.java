@@ -18,6 +18,10 @@ import org.junit.jupiter.api.Test;
  * Unit tests for the ProductCatalogueGUI class.
  * This test class ensures that product loading and deletion work correctly.
  */
+
+/**
+ * Default Constructor for CatalogueGUITest
+ */
 public class CatalogueGUITest {
     private ProductCatalogueGUI gui;
     private FakeProductFunctions fakeProductFunctions;

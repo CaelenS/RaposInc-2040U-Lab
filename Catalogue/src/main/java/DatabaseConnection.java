@@ -8,6 +8,10 @@ import io.github.cdimascio.dotenv.Dotenv;
  * Provides a utility method to establish a connection to a database using
  * environment variables for configuration.
  */
+
+/**
+ * Default constructor for DatabaseConnection
+ */
 public class DatabaseConnection {
     
     /**

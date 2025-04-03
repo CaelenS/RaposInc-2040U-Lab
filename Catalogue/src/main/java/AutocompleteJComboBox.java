@@ -15,7 +15,6 @@ import java.util.List;
  * A custom JComboBox that provides autocomplete functionality based on a given searchable data source.
  * This component listens for user input and dynamically updates the dropdown list with matching suggestions.
  *
- * @param <String> The type of items in the combo box.
  */
 public class AutocompleteJComboBox extends JComboBox<String> {
     

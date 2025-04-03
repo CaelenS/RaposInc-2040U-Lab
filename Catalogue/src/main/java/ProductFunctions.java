@@ -146,7 +146,7 @@ public class ProductFunctions implements InterfaceProductFunctions {
      * Filters products based on a specified column, operator, and filter value.
      * 
      * @param column The column to filter by.
-     * @param operator The comparison operator (e.g., <, =, >).
+     * @param operator The comparison operator (e.g., greater than, equals , less than).
      * @param filterValue The value to filter against.
      * @return A list of filtered Product objects.
      */
@@ -266,7 +266,7 @@ public class ProductFunctions implements InterfaceProductFunctions {
      *
      * @param searchText     The free-text search term for product name, genre, or manufacturer.
      * @param selectedColumn The column to filter by (e.g., Price, Stock, Rating, Genre, etc.).
-     * @param operator       The operator for numeric filtering (e.g., >, <, =).
+     * @param operator       The operator for numeric filtering (e.g., greater than, less than, equals).
      * @param filterValue    The value for numeric filtering.
      * @param selectedValue  The value for categorical filtering.
      * @return A list of products matching the search and filter criteria.

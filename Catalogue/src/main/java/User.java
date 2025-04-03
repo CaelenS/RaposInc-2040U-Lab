@@ -2,8 +2,19 @@
  * Represents a user with an ID, username, and role.
  */
 public class User {
+    /**
+     * The user's Identification
+     */
     public int userId;
+
+    /**
+     * The user's username
+     */
     public String username;
+
+    /**
+     * The user's role (Admin or Employee)
+     */
     public String role;
 
     /**

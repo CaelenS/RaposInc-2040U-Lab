@@ -1,12 +1,50 @@
+/**
+ * The class which contains all data related to a product
+ */
 public class Product {
+    /**
+     * The unique identifier for the product.
+     */
     public int productId;
+
+    /**
+     * The name of the product.
+     */
     public String productName;
+
+    /**
+     * The quantity of the product available in stock.
+     */
     public int stock;
+
+    /**
+     * The price of the product.
+     */
     public double price;
+
+    /**
+     * The genre or category of the product (e.g., electronics, clothing, etc.).
+     */
     public String genre;
+
+    /**
+     * The average rating of the product (e.g., out of 5 stars).
+     */
     public double rating;
+
+    /**
+     * The manufacturer or brand of the product.
+     */
     public String manufacturer;
+
+    /**
+     * The Universal Product Code (UPC) for the product.
+     */
     public String upc;
+
+    /**
+     * A brief description of the product, highlighting key features or specifications.
+     */
     public String description;
 
     /**
