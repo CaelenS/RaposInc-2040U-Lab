@@ -116,7 +116,7 @@ public class ProductFunctions implements InterfaceProductFunctions {
      */
     public List<Product> searchProducts(String searchTerm) {
         List<Product> products = new ArrayList<>();
-        String sql = "SELECT * FROM Products WHERE Product_Name ILIKE ? OR Genre ILIKE ? OR Manufacturer ILIKE ?";
+        String sql = "SELECT * FROM Products WHERE Product_Name ILIKE ? OR Genre ILIKE ? OR Manufacturer ILIKE ? OR UPC ILIKE ? OR Description ILIKE ?";
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             String likeTerm = "%" + searchTerm + "%";
             pstmt.setString(1, likeTerm);
