@@ -32,7 +32,7 @@ This is a catalogue for the toys and games domain. Currently, users can:
     - **JDBC Driver** (e.g., for PostgreSQL)  
     - **Maven** (optional, if using Maven for dependency management)
 
-3. **Database Setup**  
+3. **Database Setup (Optionally)**  
     Note: The database is already set up. All you need to do is ensure that the .env file in the resources folder contains the correct key and credentials. If you wish to set up your own server using SQL, follow the remaining steps below:
     - Create a new database in PostgreSQL (or your preferred RDBMS).
     - Create a .env file in the project root with your database configuration details (database URL, username, and password).
