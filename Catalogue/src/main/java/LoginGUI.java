@@ -50,6 +50,45 @@ public class LoginGUI {
 
         loginFrame.setVisible(true);
     }
+    /**
+     * Constructs the Login GUI for test mode (skips database connection).
+     * @param testMode If true, skips database connection and creates a fake login.
+     */
+    public LoginGUI(boolean testMode) {
+        if (!testMode) {
+            // Normal mode: connect to real database
+            Connection conn = DatabaseConnection.connect();
+            if (conn == null) {
+                JOptionPane.showMessageDialog(null, "Database connection failed.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            UserAuth auth = new UserAuth(conn);
+            setupLoginFrame(auth); // Build the GUI with real authentication
+        } else {
+            // Test mode: skip database connection
+            setupLoginFrame(null); // Build the GUI without authentication
+        }
+    }
+
+
+    /**
+     * Sets up the login frame window.
+     * @param auth The UserAuth object for login validation (can be null in test mode).
+     */
+    private void setupLoginFrame(UserAuth auth) {
+        loginFrame = new JFrame("Login");
+        loginFrame.setSize(800, 600);
+        loginFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        loginFrame.setLocationRelativeTo(null);
+
+        JPanel panel = new JPanel();
+        panel.setLayout(null);
+        loginFrame.add(panel);
+        placeComponents(panel, auth);  // Setup the UI components with login logic
+
+        loginFrame.setVisible(true);
+    }
+
 
     /**
      * Places UI components on the panel and sets up the login button functionality.
@@ -81,14 +120,21 @@ public class LoginGUI {
         panel.add(loginButton);
 
         loginButton.addActionListener(e -> {
-            String username = usernameField.getText();
-            String password = new String(passwordField.getPassword());
-            User user = auth.login(username, password);
-            if (user != null) {
+            if (auth == null) {
+                // Fakes a successful login, in Test Mode
                 loginFrame.dispose();
-                showLoadingScreen(user);
+                showLoadingScreen(new User(1, "TestUser", "admin"));
             } else {
-                JOptionPane.showMessageDialog(loginFrame, "Invalid credentials.");
+                // Real Database authentication
+                String username = usernameField.getText();
+                String password = new String(passwordField.getPassword());
+                User user = auth.login(username, password);
+                if (user != null) {
+                    loginFrame.dispose();
+                    showLoadingScreen(user);
+                } else {
+                    JOptionPane.showMessageDialog(loginFrame, "Invalid credentials.");
+                }
             }
         });
     }

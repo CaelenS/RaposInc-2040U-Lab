@@ -27,7 +27,7 @@ public class ProductCatalogueGUI extends JFrame {
     private JFrame frame;
     private JTable table;
     private DefaultTableModel tableModel;
-    private ProductFunctions productFunctions;
+    private InterfaceProductFunctions productFunctions;
     private User currentUser;
     // Class field for the timer:
     private Timer suggestionTimer;
@@ -130,6 +130,72 @@ public class ProductCatalogueGUI extends JFrame {
         }
         setVisible(true);
     }
+        //BlackBoxTesting
+        public ProductCatalogueGUI(User user, InterfaceProductFunctions productFunctions) {
+            this.currentUser = user;
+            this.productFunctions = productFunctions;
+
+            if (currentUser == null) {
+                JOptionPane.showMessageDialog(null, "No user logged in.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            setTitle("Product Catalogue");
+            setSize(800, 600);
+            setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            setLayout(new BorderLayout());
+
+            // Same GUI setup as in your main constructor:
+            searchField = new JTextField(15);
+            columnDropdown = new JComboBox<>(new String[]{"Select Column", "Product_Name", "Stock", "Price", "Genre", "Rating", "Manufacturer"});
+            operatorDropdown = new JComboBox<>(new String[]{"<", "=", ">"});
+            suggestionDropdown = new JComboBox<>();
+            filterValueField = new JTextField(10);
+            searchButton = new JButton("Search");
+            searchPanel = new JPanel();
+            searchPanel.add(new JLabel("Search:"));
+            searchPanel.add(searchField);
+            searchPanel.add(new JLabel("Filter by:"));
+            searchPanel.add(columnDropdown);
+            searchPanel.add(operatorDropdown);
+            searchPanel.add(suggestionDropdown);
+            searchPanel.add(filterValueField);
+            searchPanel.add(searchButton);
+
+            add(searchPanel, BorderLayout.NORTH);
+            add(searchPanel, BorderLayout.NORTH);
+
+            operatorDropdown.setVisible(false);
+            suggestionDropdown.setVisible(false);
+            filterValueField.setVisible(false);
+            columnDropdown.addActionListener(e -> updateFilterUI());
+            searchButton.addActionListener(e -> searchProducts());
+
+            tableModel = new DefaultTableModel(new String[]{"ID", "Name", "Stock", "Price", "Genre", "Rating", "Manufacturer", "UPC", "Description"}, 0);
+            table = new JTable(tableModel);
+            loadProducts();
+
+            JScrollPane scrollPane = new JScrollPane(table);
+            add(scrollPane, BorderLayout.CENTER);
+
+            if ("admin".equals(user.role)) {
+                JPanel buttonPanel = new JPanel();
+                JButton addButton = new JButton("Add");
+                JButton editButton = new JButton("Edit");
+                JButton deleteButton = new JButton("Delete");
+
+                buttonPanel.add(addButton);
+                buttonPanel.add(editButton);
+                buttonPanel.add(deleteButton);
+                add(buttonPanel, BorderLayout.SOUTH);
+
+                addButton.addActionListener(e -> addProduct());
+                editButton.addActionListener(e -> editProduct());
+                deleteButton.addActionListener(e -> deleteProduct());
+            }
+
+            setVisible(true);
+        }
 
     /**
      * Loads products from the database and updates the table.

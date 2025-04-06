@@ -156,6 +156,10 @@ public class CatalogueGUITest {
             deletedProducts.add(productId);
             fakeProducts.removeIf(p -> p.productId == productId);
         }
+        @Override
+        public List<String> getDistinctValues(String column, String typeFilter) {
+            return List.of("FakeValue1", "FakeValue2");  // Return fake values for testing
+        }
 
         /**
          * Checks if a product has been deleted.

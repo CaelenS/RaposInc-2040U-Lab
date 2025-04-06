@@ -87,5 +87,12 @@ class ProductFunctionsTest {
         public void deleteProduct(int productId) {
             fakeProducts.removeIf(p -> p.productId == productId);
         }
+
+        @Override
+        public List<String> getDistinctValues(String column, String typeFilter) {
+            return List.of("FakeValue1", "FakeValue2");  // Return fake values for testing
+        }
     }
+
 }
+

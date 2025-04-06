@@ -17,7 +17,7 @@ public class BlackBoxTesting {
     @Order(1)
     public void testApplicationLaunch() {
         try {
-            LoginGUI.main(new String[]{});
+            new LoginGUI(true);
             assertTrue(true, "Application launched without exceptions.");
             Thread.sleep(1000);
         } catch (Exception e) {
@@ -132,7 +132,7 @@ public class BlackBoxTesting {
 
         @Override
         public List<String> getDistinctValues(String column, String typeFilter) {
-            return List.of("FakeValue1", "FakeValue2");
+            return List.of("FakeValue1", "FakeValue2"); //Returns fake values for testing
         }
 
         @Override

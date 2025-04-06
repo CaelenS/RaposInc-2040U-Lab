@@ -31,4 +31,6 @@ public interface InterfaceProductFunctions {
      * @param productId The unique identifier of the product to be deleted.
      */
     void deleteProduct(int productId);
+
+    List<String> getDistinctValues(String column, String typeFilter); //BlackBoxTesting
 }

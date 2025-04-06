@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="05066916-0997-4542-bd00-d4974fb738ec" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Catalogue/src/test/java/BlackBoxTesting.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Catalogue/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Catalogue/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Catalogue/src/main/java/DatabaseConnection.java" beforeDir="false" afterPath="$PROJECT_DIR$/Catalogue/src/main/java/DatabaseConnection.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Catalogue/src/main/java/DatabaseSearchable.java" beforeDir="false" afterPath="$PROJECT_DIR$/Catalogue/src/main/java/DatabaseSearchable.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Catalogue/src/main/java/InterfaceProductFunctions.java" beforeDir="false" afterPath="$PROJECT_DIR$/Catalogue/src/main/java/InterfaceProductFunctions.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Catalogue/src/main/java/ProductCatalogueGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/Catalogue/src/main/java/ProductCatalogueGUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Catalogue/src/test/java/CatalogueGUITest.java" beforeDir="false" afterPath="$PROJECT_DIR$/Catalogue/src/test/java/CatalogueGUITest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Catalogue/src/test/java/ProductFunctionsTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/Catalogue/src/test/java/ProductFunctionsTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Catalogue/target/classes/DatabaseConnection.class" beforeDir="false" afterPath="$PROJECT_DIR$/Catalogue/target/classes/DatabaseConnection.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Catalogue/target/classes/ProductCatalogueGUI.class" beforeDir="false" afterPath="$PROJECT_DIR$/Catalogue/target/classes/ProductCatalogueGUI.class" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;zSulaimanx&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/CaelenS/RaposInc-2040U-Lab.git&quot;,
+    &quot;accountId&quot;: &quot;e5df00d1-cd50-4504-bbed-7155c490ca7f&quot;
+  }
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 5
+}</component>
+  <component name="ProjectId" id="2tyFaY0Me9IqGwJJmzdKwlhSHhz" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.LoginGUI.executor&quot;: &quot;Run&quot;,
+    &quot;Application.ProductCatalogueGUI.executor&quot;: &quot;Run&quot;,
+    &quot;Application.Test.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.BlackBLoxTests.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.BlackBLoxTests.testApplicationLaunch.executor&quot;: &quot;Debug&quot;,
+    &quot;JUnit.BlackBoxTesting.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.BlackBoxTesting.testApplicationLaunch.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.CatalogueGUITest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.Opaque.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.ProductFunctionsTest.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;javascript.karma.karma_node_package_dir&quot;: &quot;&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/csci2040/project/RaposInc-2040U-Lab/Catalogue/src/test&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\csci2040\project\RaposInc-2040U-Lab\Catalogue\src\test" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\csci2040\project\RaposInc-2040U-Lab\Catalogue\src\test\resources" />
+      <recent name="C:\csci2040\project\RaposInc-2040U-Lab" />
+      <recent name="C:\csci2040\project\RaposInc-2040U-Lab\Catalogue" />
+      <recent name="C:\csci2040\project\RaposInc-2040U-Lab\Catalogue\src\test\java" />
+    </key>
+  </component>
+  <component name="RunManager" selected="JUnit.Opaque">
+    <configuration name="BlackBoxTesting.testApplicationLaunch" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="TestRapos" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="BlackBoxTesting" />
+      <option name="METHOD_NAME" value="testApplicationLaunch" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Opaque" type="JUnit" factoryName="JUnit">
+      <module name="RaposInc-2040U-Lab" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="BlackBoxTesting" />
+      <option name="METHOD_NAME" value="" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" value="-Denv.skip=true" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="JUnit.Opaque" />
+      <item itemvalue="JUnit.BlackBoxTesting.testApplicationLaunch" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.BlackBoxTesting.testApplicationLaunch" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-a94e463ab2e7-intellij.indexing.shared.core-IU-243.25659.39" />
+        <option value="bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-IU-243.25659.39" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="05066916-0997-4542-bd00-d4974fb738ec" name="Changes" comment="" />
+      <created>1741316471827</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1741316471827</updated>
+      <workItem from="1741316472937" duration="3405000" />
+      <workItem from="1741569654662" duration="1749000" />
+      <workItem from="1741572810785" duration="183000" />
+      <workItem from="1741573001930" duration="159000" />
+      <workItem from="1741573168939" duration="178000" />
+      <workItem from="1741573354747" duration="693000" />
+      <workItem from="1741915099836" duration="682000" />
+      <workItem from="1742179816189" duration="169000" />
+      <workItem from="1742520890437" duration="1928000" />
+      <workItem from="1742523926260" duration="906000" />
+      <workItem from="1742527751004" duration="454000" />
+      <workItem from="1742669370174" duration="49000" />
+      <workItem from="1742859437235" duration="3466000" />
+      <workItem from="1743010696107" duration="22000" />
+      <workItem from="1743531166308" duration="10831000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/Catalogue/src/main/java/LoginGUI.java</url>
+          <line>97</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>

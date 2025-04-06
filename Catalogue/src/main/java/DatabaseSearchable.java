@@ -12,9 +12,9 @@ public class DatabaseSearchable implements Searchable<String, String> {
     private final String column;
     
     /**
-     * The {@link ProductFunctions} instance responsible for retrieving data from the database.
+     * The {@link InterfaceProductFunctions} instance responsible for retrieving data from the database.
      */
-    private final ProductFunctions productFunctions;
+    private final InterfaceProductFunctions productFunctions;
     
     /**
      * Constructs a new {@code DatabaseSearchable} with the specified column and database handler.
@@ -22,7 +22,7 @@ public class DatabaseSearchable implements Searchable<String, String> {
      * @param column The database column to perform searches on.
      * @param productFunctions The product functions instance used to retrieve data.
      */
-    public DatabaseSearchable(String column, ProductFunctions productFunctions) {
+    public DatabaseSearchable(String column, InterfaceProductFunctions productFunctions) {
         this.column = column;
         this.productFunctions = productFunctions;
     }
