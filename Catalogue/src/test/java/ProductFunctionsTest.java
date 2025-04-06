@@ -62,6 +62,12 @@ class ProductFunctionsTest {
         private final List<Product> fakeProducts = new ArrayList<>();
 
         @Override
+        public List<String> getDistinctValues(String column, String typeFilter) {
+            // Just return dummy/fake values for testing purposes
+            return List.of("FakeValue1", "FakeValue2");
+        }
+        
+        @Override
         public List<Product> viewProducts() {
             return new ArrayList<>(fakeProducts);
         }
