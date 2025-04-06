@@ -3,6 +3,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
@@ -66,16 +67,29 @@ public class BlackBoxTesting {
     @Order(4)
     public void testEditProductUpdatesFakeBackend() {
         try {
+            User user = new User(1, "Sully", "admin");
             FakeProductFunctions fake = new FakeProductFunctions();
-            Product original = new Product(1, "Old Name", 10, 20.0, "Genre", 4.0, "Brand", "UPC", "Desc");
-            fake.addProduct(original);
+            fake.addProduct(new Product(1, "Old Name", 10, 20.0, "Genre", 4.0, "Brand", "UPC", "Desc"));
 
+            // Launch GUI
+            ProductCatalogueGUI gui = new ProductCatalogueGUI(user, fake);
+            Thread.sleep(1000); // Allow GUI to load
+
+            // Edit product in fake backend
             fake.editProduct(1, "New Name", 50, 30.0);
 
-            Product updated = fake.viewProducts().get(0);
+            // Force GUI to reload products after edit
+            // (since editProduct in real GUI automatically calls loadProducts, but here you simulate manually)
+            Method loadProductsMethod = ProductCatalogueGUI.class.getDeclaredMethod("loadProducts");
+            loadProductsMethod.setAccessible(true);
+            loadProductsMethod.invoke(gui);
+
+            Product updated = fake.viewProducts().getFirst();
             assertEquals("New Name", updated.productName);
             assertEquals(50, updated.stock);
             assertEquals(30.0, updated.price);
+
+            Thread.sleep(2000);
         } catch (Exception e) {
             fail("Editing product failed: " + e.getMessage());
         }
