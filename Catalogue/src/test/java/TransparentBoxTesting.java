@@ -8,10 +8,17 @@ import java.util.List;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.Order;
-
+/**
+ * Transparent box testing for the Login and Product Catalogue GUI.
+ * Tests different user roles (admin and employee) and GUI visibility,
+ * verifying internal and external application behaviors.
+ */
 @TestMethodOrder(OrderAnnotation.class)
 public class TransparentBoxTesting {
 
+    /**
+     * Tests if the application launches successfully.
+     */
     @Test
     @Order(1)
     public void testApplicationLaunch() {
@@ -24,6 +31,9 @@ public class TransparentBoxTesting {
         }
     }
 
+    /**
+     * Tests if an employee can log in and access the Product Catalogue GUI.
+     */
     @Test
     @Order(2)
     public void testEmployeeLoginToCatalogueGUI() {
@@ -40,6 +50,9 @@ public class TransparentBoxTesting {
         }
     }
 
+    /**
+     * Tests if an admin can login and access the Product Catalogue GUI.
+     */
     @Test
     @Order(3)
     public void testAdminLoginToCatalogueGUI() {
@@ -56,6 +69,10 @@ public class TransparentBoxTesting {
         }
     }
 
+    /**
+     * Tests the integration of the Product Catalogue GUI after login.
+     * Verifies visibility and product loading.
+     */
     @Test
     @Order(4)
     public void testCatalogueGUIIntegration() {
@@ -83,6 +100,10 @@ public class TransparentBoxTesting {
         }
     }
 
+    /**
+     * A fake implementation of InterfaceProductFunctions used for transparent box testing.
+     * Simulates product operations without a database.
+     */
     private static class FakeProductFunctionsTwo implements InterfaceProductFunctions {
         private final List<Product> fakeProducts = new ArrayList<>();
 

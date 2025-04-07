@@ -9,10 +9,19 @@ import java.util.List;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.Order;
-
+/**
+ * Black box testing for the Login and Product Catalogue GUI.
+ * Simulates user actions to verify application behavior without
+ * knowing internal code structure.
+ *
+ * Tests include application launch, login, product addition,
+ * editing, deletion, and GUI disposal.
+ */
 @TestMethodOrder(OrderAnnotation.class)
 public class BlackBoxTesting {
-
+    /**
+     * Tests if the application launches without exceptions.
+     */
     @Test
     @Order(1)
     public void testApplicationLaunch() {
@@ -25,6 +34,9 @@ public class BlackBoxTesting {
         }
     }
 
+    /**
+    * Tests if login opens the Product Catalogue GUI.
+    */
     @Test
     @Order(2)
     public void testLoginToCatalogueGUI() {
@@ -40,6 +52,9 @@ public class BlackBoxTesting {
         }
     }
 
+    /**
+     * Tests if a newly added product is visible in the product table.
+     */
     @Test
     @Order(3)
     public void testProductAdditionVisibleInTable() {
@@ -63,6 +78,9 @@ public class BlackBoxTesting {
         }
     }
 
+    /**
+     * Tests if editing a product updates the backend storage.
+     */
     @Test
     @Order(4)
     public void testEditProductUpdatesFakeBackend() {
@@ -95,6 +113,9 @@ public class BlackBoxTesting {
         }
     }
 
+    /**
+     * Tests if deleting a product removes it from backend storage.
+     */
     @Test
     @Order(5)
     public void testDeleteProductRemovesFromBackend() {
@@ -110,6 +131,9 @@ public class BlackBoxTesting {
         }
     }
 
+    /**
+     * Tests if closing the application properly disposes of the GUI.
+     */
     @Test
     @Order(6)
     public void testCloseApplicationDisposesGUI() {
@@ -126,7 +150,10 @@ public class BlackBoxTesting {
         }
     }
 
-    // -- FAKE BACKEND CLASS --
+    /**
+     * A fake implementation of InterfaceProductFunctions for testing.
+     * Simulates product operations in memory without database access.
+     */
     private static class FakeProductFunctions implements InterfaceProductFunctions {
         private final List<Product> fakeProducts = new ArrayList<>();
 

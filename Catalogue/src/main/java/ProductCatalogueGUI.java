@@ -130,7 +130,13 @@ public class ProductCatalogueGUI extends JFrame {
         }
         setVisible(true);
     }
-        //BlackBoxTesting
+        /**
+         * Constructs the ProductCatalogueGUI using a provided product functions instance.
+         * This constructor is mainly used for testing purposes to inject a mock database handler.
+         *
+         * @param user The currently logged-in user.
+         * @param productFunctions The injected product functions instance (real or fake).
+         */
         public ProductCatalogueGUI(User user, InterfaceProductFunctions productFunctions) {
             this.currentUser = user;
             this.productFunctions = productFunctions;
